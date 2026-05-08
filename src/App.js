@@ -13,7 +13,7 @@ function App() {
       <div style={{width: '100%', height: '100%', display: 'flex'}}>
         <div style={{width: '80%', height: '100%', backgroundColor: 'cyan'}}>
           <Canvas>
-            <mesh position={[0, -0.5, 0]}>
+            {/* <mesh position={[0, -0.5, 0]}> */}
               <WallModel />
               <WindowModel />
               <ambientLight 
@@ -27,7 +27,7 @@ function App() {
                 maxDistance={300}
                 maxPolarAngle={Math.PI / 2}
               />
-            </mesh>
+            {/* </mesh> */}
           </Canvas>
         </div>
         <div style={{width: '20%', height: '100%', backgroundColor: 'lightgreen', padding: '20px'}}>
