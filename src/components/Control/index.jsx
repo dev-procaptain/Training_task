@@ -1,5 +1,5 @@
 import React from "react";
-import {initialData,taskStore} from "../../store";
+import {initialData,methodStore,taskStore} from "../../store";
 import RangeSlider from "../RangeSlider";
 import './style.css';
 
@@ -21,6 +21,10 @@ const Control=() => {
 
 	};
 
+	const {methodInfo,setMethodInfo}=methodStore();
+	const changeMethod=(event) => {
+		setMethodInfo(event.target.value)
+	}
 	return (
 		<div>
 			<h1>Building Option</h1>
@@ -50,6 +54,18 @@ const Control=() => {
 					}
 				</select>
 				<h1>{taskInfo}</h1>
+
+				<form onChange={changeMethod}>
+					{
+						taskInfo==='SS1-T1242'&&['method1','method2'].map((element,index) => {
+							return (<>
+								<input key={index} type="radio" id={element} value={element} name="doormethod" />
+								<label htmlFor={element}>{element}</label>
+							</>
+							)
+						})
+					}
+				</form>
 			</div>
 		</div>
 	)

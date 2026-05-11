@@ -20,3 +20,10 @@ export const taskStore=create((set) => ({
 		taskInfo: task
 	})
 }));
+
+export const methodStore=create((set) => ({
+	methodInfo: 'method1',
+	setMethodInfo: (method) => set({
+		methodInfo: method
+	})
+}));
