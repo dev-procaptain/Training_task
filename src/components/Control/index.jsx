@@ -9,8 +9,8 @@ const UIData={
 		{name: "height",minValue: 1,maxValue: 3,id: 'SS1-T1211'},
 	],
 	'SS1-T1242': [
-		{name: "width",minValue: 5,maxValue: 8,id: 'SS1-T1242'},
-		{name: "height",minValue: 4,maxValue: 7,id: 'SS1-T1242'},
+		{name: "width",minValue: 5,maxValue: 16,id: 'SS1-T1242'},
+		{name: "height",minValue: 4,maxValue: 14,id: 'SS1-T1242'},
 	]
 };
 const Control=() => {

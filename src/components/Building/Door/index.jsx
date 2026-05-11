@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import React,{useMemo} from 'react'
 import {extrudeSetting} from '../../../utils/Function';
 import {useStore} from '../../../store';
+import {useLoader} from '@react-three/fiber';
 
 const Door=() => {
 	const {sizeInfo}=useStore();
@@ -10,11 +11,15 @@ const Door=() => {
 	const scaleX=20;
 	const scaleY=21;
 	const trimModelThk=4;
-	const innerTrimModelThk=3;
+	const innerTrimModelThk=6;
 	const bottomTrimThk=2;
 	const windowCountX=2;
-	const patternContX=4;
-	const countY=5;
+	const windowTrimThk=3;
+	const glassTrimThk=1;
+	const piecePatternCountX=5;
+	const patternContX=width<8? windowCountX*2:windowCountX*4;
+	const countY=height<7? 5:7;
+	const glassCoutX=patternContX/windowCountX;
 
 	const trimModel=useMemo(() => {
 		const trimModelWidth=width*scaleX;
@@ -67,20 +72,103 @@ const Door=() => {
 		innerModelShape.lineTo(-innerModelWidth/2,bottomTrimThk);
 		innerModelShape.closePath();
 
-		const windowModelWidth=(innerModelWidth-innerTrimModelThk*3)/windowCountX;
-		const windowModelHeight=(innerModelHeight-bottomTrimThk-innerTrimModelThk*(countY+1))/countY;
+		const windowModelwidth=(innerModelWidth-innerTrimModelThk*(windowCountX+2))/windowCountX;
+		const windowModelHeight=(innerModelHeight-innerTrimModelThk*(countY+1))/countY;
+		const patternModelWidth=(innerModelWidth-innerTrimModelThk*(patternContX+2))/patternContX;
+		const patternAreaHeight=(innerModelHeight-innerTrimModelThk-windowModelHeight)
+		const patternModelHeight=(innerModelHeight-innerTrimModelThk*(countY+1))/countY;
+		const glassAreaModelWidth=windowModelwidth-windowTrimThk*2;
+		const glassAreaModelHeight=windowModelHeight-windowTrimThk*2;
+		const glassModelWidth=(glassAreaModelWidth-glassTrimThk*(glassCoutX+1))/glassCoutX;
+		const glassModelHeight=(glassAreaModelHeight-glassTrimThk*3)/2;
+		const piecePatternModelWidth=(patternModelWidth-glassTrimThk*(piecePatternCountX+1))/piecePatternCountX;
+		const piecePatternModelHeight=patternModelHeight-glassTrimThk*2;
 
-		const windowModelShape=new THREE.Shape();
-		windowModelShape.moveTo(-innerModelWidth/2+innerTrimModelThk*2,innerModelHeight-innerTrimModelThk);
-		windowModelShape.lineTo(-innerModelWidth/2+windowModelWidth+innerTrimModelThk*2,innerModelHeight-innerTrimModelThk);
-		windowModelShape.lineTo(-innerModelWidth/2+windowModelWidth+innerTrimModelThk*2,innerModelHeight-windowModelHeight);
-		windowModelShape.lineTo(-innerModelWidth/2+innerTrimModelThk*2,innerModelHeight-windowModelHeight);
-		windowModelShape.closePath();
+		let windowModel=[];
+		let patternModel=[];
+		let glassAreaModel=[];
+		let glassModel=[];
+		let piecePatternModel=[];
 
-		innerModelShape.holes.push(windowModelShape);
+		[-1,1].forEach(dir => {
+			const windowModelShape=new THREE.Shape();
+			windowModelShape.moveTo(dir*(innerModelWidth/2-innerTrimModelThk),innerModelHeight-innerTrimModelThk);
+			windowModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-windowModelwidth),innerModelHeight-innerTrimModelThk);
+			windowModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-windowModelwidth),innerModelHeight-windowModelHeight-innerTrimModelThk);
+			windowModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk),innerModelHeight-windowModelHeight-innerTrimModelThk);
+			windowModelShape.closePath();
+
+			const glassAreaModelShape=new THREE.Shape();
+			glassAreaModelShape.moveTo(dir*(innerModelWidth/2-innerTrimModelThk-windowTrimThk),innerModelHeight-innerTrimModelThk-windowTrimThk);
+			glassAreaModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-windowTrimThk-glassAreaModelWidth),innerModelHeight-innerTrimModelThk-windowTrimThk);
+			glassAreaModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-windowTrimThk-glassAreaModelWidth),innerModelHeight-innerTrimModelThk-windowTrimThk-glassAreaModelHeight);
+			glassAreaModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-windowTrimThk),innerModelHeight-innerTrimModelThk-windowTrimThk-glassAreaModelHeight);
+			glassAreaModelShape.closePath();
+
+			windowModelShape.holes.push(glassAreaModelShape);
+
+			glassAreaModel.push(glassAreaModelShape);
+
+			const glassModelX=innerModelWidth/2-innerTrimModelThk-windowTrimThk-glassTrimThk;
+			const glassModelY=innerModelHeight-innerTrimModelThk-windowTrimThk-glassTrimThk;
+
+			for(let col=0;col<2;col++) {
+				for(let row=0;row<glassCoutX;row++) {
+					const glassModelShape=new THREE.Shape();
+					glassModelShape.moveTo(dir*(glassModelX-row*(glassModelWidth+glassTrimThk)),glassModelY-col*(glassModelHeight+glassTrimThk));
+					glassModelShape.lineTo(dir*((glassModelX-glassModelWidth)-row*(glassModelWidth+glassTrimThk)),glassModelY-col*(glassModelHeight+glassTrimThk));
+					glassModelShape.lineTo(dir*((glassModelX-glassModelWidth)-row*(glassModelWidth+glassTrimThk)),glassModelY-glassModelHeight-col*(glassModelHeight+glassTrimThk));
+					glassModelShape.lineTo(dir*(glassModelX-row*(glassModelWidth+glassTrimThk)),glassModelY-glassModelHeight-col*(glassModelHeight+glassTrimThk));
+					glassModelShape.closePath();
+
+					glassAreaModelShape.holes.push(glassModelShape);
+
+					glassModel.push(glassModelShape);
+				}
+			}
+
+			for(let col=0;col<countY-1;col++) {
+				for(let row=0;row<glassCoutX;row++) {
+					const patternModelShape=new THREE.Shape();
+
+					patternModelShape.moveTo(dir*(innerModelWidth/2-innerTrimModelThk-row*(patternModelWidth+innerTrimModelThk)),patternAreaHeight-innerTrimModelThk-col*(patternModelHeight+innerTrimModelThk));
+					patternModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-patternModelWidth-row*(patternModelWidth+innerTrimModelThk)),patternAreaHeight-innerTrimModelThk-col*(patternModelHeight+innerTrimModelThk));
+					patternModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-patternModelWidth-row*(patternModelWidth+innerTrimModelThk)),patternAreaHeight-patternModelHeight-innerTrimModelThk-col*(patternModelHeight+innerTrimModelThk));
+					patternModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-row*(patternModelWidth+innerTrimModelThk)),patternAreaHeight-patternModelHeight-innerTrimModelThk-col*(patternModelHeight+innerTrimModelThk));
+					patternModelShape.closePath();
+
+					const innerPatternModelX=innerModelWidth/2-innerTrimModelThk-glassTrimThk-row*(innerTrimModelThk+patternModelWidth);
+					const innerPatternModelY=patternAreaHeight-innerTrimModelThk-glassTrimThk-col*(innerTrimModelThk+patternModelHeight);
+
+					for(let row=0;row<piecePatternCountX;row++) {
+						const innerPatternModelShape=new THREE.Shape();
+						innerPatternModelShape.moveTo(dir*(innerPatternModelX-row*(piecePatternModelWidth+glassTrimThk)),innerPatternModelY);
+						innerPatternModelShape.lineTo(dir*(innerPatternModelX-piecePatternModelWidth-row*(piecePatternModelWidth+glassTrimThk)),innerPatternModelY);
+						innerPatternModelShape.lineTo(dir*(innerPatternModelX-piecePatternModelWidth-row*(piecePatternModelWidth+glassTrimThk)),innerPatternModelY-piecePatternModelHeight);
+						innerPatternModelShape.lineTo(dir*(innerPatternModelX-row*(piecePatternModelWidth+glassTrimThk)),innerPatternModelY-piecePatternModelHeight);
+						innerPatternModelShape.closePath();
+
+						piecePatternModel.push(innerPatternModelShape);
+						patternModelShape.holes.push(innerPatternModelShape);
+					}
+
+					innerModelShape.holes.push(patternModelShape);
+					patternModel.push(patternModelShape)
+				}
+			}
+			innerModelShape.holes.push(windowModelShape);
+			windowModel.push(windowModelShape);
+		})
+
+
 
 		return {
 			innerModelShape,
+			windowModel,
+			patternModel,
+			glassAreaModel,
+			glassModel,
+			piecePatternModel
 		}
 
 	},[width,height])
@@ -100,6 +188,7 @@ const Door=() => {
 		}
 
 	},[width,height])
+
 	return (
 		<>
 			<group name='trimModel'>
@@ -116,7 +205,37 @@ const Door=() => {
 			<group name='innerModel'>
 				<mesh>
 					<extrudeGeometry args={[innerModel.innerModelShape,extrudeSetting(2)]} />
-					<meshPhongMaterial color={'#e6e6e6'} />
+					<meshPhongMaterial color={'#f2f2f2'} />
+				</mesh>
+				<mesh>
+					<extrudeGeometry args={[innerModel.windowModel,extrudeSetting(3.5)]} />
+					<meshPhongMaterial color={'#8c8c8c'} />
+				</mesh>
+				<mesh>
+					<extrudeGeometry args={[innerModel.glassAreaModel,extrudeSetting(3.5)]} />
+					<meshPhongMaterial color={'#f2f2f2'} />
+				</mesh>
+				<mesh>
+					<extrudeGeometry args={[innerModel.glassModel,extrudeSetting(3.5)]} />
+					<meshStandardMaterial
+						color={'#4d4d4d'}
+						roughness={0}
+
+					/>
+				</mesh>
+				<mesh>
+					<extrudeGeometry args={[innerModel.patternModel,extrudeSetting(3)]} />
+					<meshPhongMaterial color={'#8c8c8c'} />
+				</mesh>
+				<mesh>
+					<extrudeGeometry args={[innerModel.piecePatternModel,extrudeSetting(3.5)]} />
+					<meshStandardMaterial
+						color={'#f2f2f2'}
+						//normalMap={patternMap}
+						roughness={0.8}
+						metalness={0}
+
+					/>
 				</mesh>
 			</group>
 
@@ -130,4 +249,4 @@ const Door=() => {
 	)
 }
 
-export default Door
+export default Door;
