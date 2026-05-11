@@ -137,9 +137,9 @@ const Method2=() => {
 
 			countY=Math.floor((patternAreaHeight-innerTrimModelThk)/(patternModelHeight+innerTrimModelThk));
 
-			const patternBetweenX=patternContX>1? (innerModelWidth/2-innerTrimModelThk*2-patternModelWidth*patternContX)/(patternContX-1):0;
+			const patternBetweenX=(innerModelWidth/2-innerTrimModelThk*2-patternModelWidth*patternContX)/(patternContX-1);
 
-			const patternBetweenY=countY>1? (patternAreaHeight-innerTrimModelThk*2-patternModelHeight*countY)/(countY-1):0;
+			const patternBetweenY=(patternAreaHeight-innerTrimModelThk*2-patternModelHeight*countY)/(countY-1);
 
 			for(let col=0;col<countY;col++) {
 				for(let row=0;row<patternContX;row++) {
