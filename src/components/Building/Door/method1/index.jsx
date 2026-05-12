@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import React,{useMemo} from 'react'
 import {useStore} from '../../../../store';
-import {useLoader} from '@react-three/fiber';
 import {extrudeSetting} from '../../../../utils/Function';
 
 const Method1=() => {

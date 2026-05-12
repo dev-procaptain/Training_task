@@ -23,7 +23,7 @@ const RangeSlider=({name,minValue,maxValue,id}) => {
     <div>
       <div style={{display: "flex",gap: "5px"}}>
         <div>{name}</div>
-        <div style={{width: "50px"}}>{name=='width'? sizeInfo[id][0]:sizeInfo[id][1]}m</div>
+        <div style={{width: "50px"}}>{name==='width'? sizeInfo[id][0]:sizeInfo[id][1]}m</div>
       </div>
       <input
         id="range-slider"

@@ -12,9 +12,9 @@ function App() {
       <div style={{width: '100%',height: '100%',display: 'flex'}}>
         <div style={{width: '80%',height: '100%',backgroundColor: 'cyan'}}>
           <Canvas>
-            <mesh position={[0,-0.5,0]}>
+            <group position={[0,-0.5,0]}>
               <Building />
-            </mesh>
+            </group>
             <ambientLight
               intensity={3}
             />
@@ -25,6 +25,8 @@ function App() {
               minDistance={100}
               maxDistance={700}
               maxPolarAngle={Math.PI/2}
+              minAzimuthAngle={-Math.PI/3}
+              maxAzimuthAngle={Math.PI/3}
             />
           </Canvas>
         </div>

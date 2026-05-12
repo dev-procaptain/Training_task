@@ -3,8 +3,9 @@ import {create} from "zustand";
 export const initialData={
 	'SS1-T1211': [4,3],
 	'SS1-T1242': [5,4],
+	'Curve_door': [3,5],
+	'Flag': [4,2],
 }
-
 
 export const useStore=create((set) => ({
 	sizeInfo: initialData,
