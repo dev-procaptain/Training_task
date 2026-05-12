@@ -17,8 +17,8 @@ function App() {
               fov: 45,
               near: 0.1,
               far: 1000,
-              aspect: window.innerWidth / window.innerHeight,
-              position: [0, 10, 200]
+              aspect: window.innerWidth/window.innerHeight,
+              position: [0,10,200]
             }}
           >
             <CanvasEnv />

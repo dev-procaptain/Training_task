@@ -1,7 +1,10 @@
 import * as THREE from 'three';
-import React,{useMemo} from 'react'
+import React from 'react'
 import {useStore} from '../../../store';
 import {extrudeSetting} from '../../../utils/Function';
+import {TextureLoader} from 'three'
+import {useLoader} from '@react-three/fiber';
+import shedTexture from '../../../assets/imgs/horizontal_hardie_plank.jpg';
 
 const CurvedoorModel=() => {
 
@@ -15,6 +18,13 @@ const CurvedoorModel=() => {
 	const doorWidth=width*scaleX;
 	const doorHeight=height*scaleY;
 	const railPadding=4;
+
+	const colorMap=useLoader(TextureLoader,shedTexture)
+	colorMap.wrapS=THREE.RepeatWrapping;
+	colorMap.wrapT=THREE.RepeatWrapping;
+	colorMap.colorSpace=THREE.SRGBColorSpace;
+	colorMap.repeat.set(0.01,0.03);
+	colorMap.flipY=false;
 
 	const outTrimShape=new THREE.Shape();
 	outTrimShape.moveTo(-doorWidth/2,0);
@@ -127,7 +137,15 @@ const CurvedoorModel=() => {
 			<group name='innerDoor'>
 				<mesh>
 					<extrudeGeometry args={[innerDoorShape,extrudeSetting(5)]} />
-					<meshStandardMaterial color={'#8c8c8c'} />
+					<meshStandardMaterial
+						bumpMap={colorMap}
+						bumpScale={0.2}
+						map={colorMap}
+						color={'#8c8c8c'}
+						side={THREE.DoubleSide}
+						roughness={0.8}
+						metalness={0}
+					/>
 				</mesh>
 				<mesh>
 					<extrudeGeometry args={[midTrimShape,extrudeSetting(5)]} />
