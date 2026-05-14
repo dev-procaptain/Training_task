@@ -4,7 +4,7 @@ export const initialData={
 	'SS1-T1211': [4,3],
 	'SS1-T1242': [5,4],
 	'Curve_door': [3,5],
-	'Flag': [4,2],
+	'Truss': [20,10],
 }
 
 export const useStore=create((set) => ({
@@ -13,7 +13,6 @@ export const useStore=create((set) => ({
 		sizeInfo: info
 	})
 }));
-
 
 export const taskStore=create((set) => ({
 	taskInfo: 'SS1-T1211',

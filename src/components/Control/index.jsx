@@ -16,10 +16,11 @@ const UIData={
 		{name: "width",minValue: 3,maxValue: 6,id: 'Curve_door'},
 		{name: "height",minValue: 5,maxValue: 10,id: 'Curve_door'},
 	],
-	'Flag': [
-		{name: "width",minValue: 4,maxValue: 8,id: 'Flag'},
-		{name: "height",minValue: 2,maxValue: 4,id: 'Flag'},
+	'Truss': [
+		{name: "width",minValue: 20,maxValue: 30,id: 'Truss'},
+		{name: "height",minValue: 10,maxValue: 20,id: 'Truss'},
 	]
+
 };
 const Control=() => {
 
