@@ -2,6 +2,9 @@ import React,{useMemo} from 'react'
 import {useStore} from '../../../store'
 import * as THREE from 'three';
 import {extrudeSetting} from '../../../utils/Function';
+import legTexture from '../../../assets/imgs/leg_texture_old.jpg';
+import {TextureLoader} from 'three'
+import {useLoader} from '@react-three/fiber';
 
 const Truss=() => {
 	const {sizeInfo}=useStore();
@@ -20,6 +23,13 @@ const Truss=() => {
 	const doorLength=length*scaleY;
 	const roofHeight=doorWidth/2*pitchRatio;
 	const roofMidHeight=doorWidth/2*5/12;
+
+	const colorMap=useLoader(TextureLoader,legTexture);
+	colorMap.wrapS=THREE.RepeatWrapping;
+	colorMap.wrapT=THREE.RepeatWrapping;
+	colorMap.colorSpace=THREE.SRGBColorSpace;
+	colorMap.repeat.set(0.02,0.01);
+	colorMap.flipY=false;
 
 	const baseModel=useMemo(() => {
 
@@ -182,30 +192,78 @@ const Truss=() => {
 			<group name='base'>
 				<mesh name='bottom_base' rotation={[Math.PI/2,0,0]}>
 					<extrudeGeometry args={[baseModel,extrudeSetting(5)]} />
-					<meshLambertMaterial color={'gray'} />
+					<meshStandardMaterial
+						bumpMap={colorMap}
+						bumpScale={0.2}
+						map={colorMap}
+						color={'#8c8c8c'}
+						side={THREE.DoubleSide}
+						roughness={0.8}
+						metalness={0}
+					/>
 				</mesh>
 				<mesh name='top_base' rotation={[Math.PI/2,0,0]} position={[0,doorHeight+5,0]}>
 					<extrudeGeometry args={[baseModel,extrudeSetting(5)]} />
-					<meshLambertMaterial color={'gray'} />
+					<meshStandardMaterial
+						bumpMap={colorMap}
+						bumpScale={0.2}
+						map={colorMap}
+						color={'#8c8c8c'}
+						side={THREE.DoubleSide}
+						roughness={0.8}
+						metalness={0}
+					/>
 				</mesh>
 			</group>
 
 			<group name='baseRail' >
 				<mesh rotation={[-Math.PI/2,0,0]}>
 					<extrudeGeometry args={[baseSideRail.baseRailModel,extrudeSetting(doorHeight)]} />
-					<meshLambertMaterial color={'#737373'} />
+					<meshStandardMaterial
+						bumpMap={colorMap}
+						bumpScale={0.2}
+						map={colorMap}
+						color={'#8c8c8c'}
+						side={THREE.DoubleSide}
+						roughness={0.8}
+						metalness={0}
+					/>
 				</mesh>
 				<mesh rotation={[-Math.PI/2,0,0]}>
 					<extrudeGeometry args={[frontBaseRail.baseRailModel,extrudeSetting(doorHeight)]} />
-					<meshLambertMaterial color={'#737373'} />
+					<meshStandardMaterial
+						bumpMap={colorMap}
+						bumpScale={0.2}
+						map={colorMap}
+						color={'#8c8c8c'}
+						side={THREE.DoubleSide}
+						roughness={0.8}
+						metalness={0}
+					/>
 				</mesh>
 				<mesh position={[0,doorHeight+5,doorLength/2-4.5]}>
 					<extrudeGeometry args={[roofBaseRail.roofBaseRailModel,extrudeSetting(3)]} />
-					<meshLambertMaterial color={'#737373'} />
+					<meshStandardMaterial
+						bumpMap={colorMap}
+						bumpScale={0.2}
+						map={colorMap}
+						color={'#8c8c8c'}
+						side={THREE.DoubleSide}
+						roughness={0.8}
+						metalness={0}
+					/>
 				</mesh>
 				<mesh rotation={[-Math.PI/2,0,0]}>
 					<extrudeGeometry args={[BackBaseRail(),extrudeSetting(doorHeight)]} />
-					<meshLambertMaterial color={'#737373'} />
+					<meshStandardMaterial
+						bumpMap={colorMap}
+						bumpScale={0.2}
+						map={colorMap}
+						color={'#8c8c8c'}
+						side={THREE.DoubleSide}
+						roughness={0.8}
+						metalness={0}
+					/>
 				</mesh>
 			</group>
 
@@ -215,11 +273,27 @@ const Truss=() => {
 						<>
 							<mesh key={index} position={[0,doorHeight+5,(doorLength/2-railThickness-railThickness/2-index*item)]}>
 								<extrudeGeometry args={[baseSideRail.roofTrussModel,extrudeSetting(3)]} />
-								<meshLambertMaterial color={'#737373'} />
+								<meshStandardMaterial
+									bumpMap={colorMap}
+									bumpScale={0.2}
+									map={colorMap}
+									color={'#8c8c8c'}
+									side={THREE.DoubleSide}
+									roughness={0.8}
+									metalness={0}
+								/>
 							</mesh>
 							<mesh key={index} position={[0,doorHeight+5,(doorLength/2-railThickness-railThickness/2-index*item)]}>
 								<extrudeGeometry args={[baseSideRail.roofMidTrussModel,extrudeSetting(3)]} />
-								<meshLambertMaterial color={'#737373'} />
+								<meshStandardMaterial
+									bumpMap={colorMap}
+									bumpScale={0.2}
+									map={colorMap}
+									color={'#8c8c8c'}
+									side={THREE.DoubleSide}
+									roughness={0.8}
+									metalness={0}
+								/>
 							</mesh>
 						</>
 					))
