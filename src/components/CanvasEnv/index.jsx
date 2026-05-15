@@ -2,7 +2,6 @@ import { Environment, OrbitControls } from '@react-three/drei';
 import { useSelector } from 'react-redux';
 
 const CanvasEnv = () => {
-  const height = useSelector((state) => state.building.buildingHeight);
 
   return (
     <>
@@ -10,7 +9,7 @@ const CanvasEnv = () => {
       <directionalLight position={[0, 100, 500]} intensity={3} />
       <directionalLight position={[0, -100, -500]} intensity={2} />
       <OrbitControls
-        target={[0, height / 2, 0]}
+        target={[0, 150, 0]}
         enableDamping
         dampingFactor={0.05}
         minDistance={100}

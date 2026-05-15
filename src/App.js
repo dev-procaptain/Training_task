@@ -1,13 +1,10 @@
 import './App.css';
 import { Canvas } from '@react-three/fiber';
-import { useSelector } from 'react-redux';
 import ControlPanelShell from './components/Control/ControlPanelShell';
 import Building from './components/Building';
 import CanvasEnv from './components/CanvasEnv';
 
 function App() {
-  const length = useSelector((state) => state.building.buildingLength);
-  const height = useSelector((state) => state.building.buildingHeight);
 
   return (
     <div className="App">
@@ -20,7 +17,7 @@ function App() {
               near: 0.1,
               far: 100000,
               aspect: window.innerWidth / window.innerHeight,
-              position: [0, height / 2, length * 2],
+              position: [0, 150, 800],
             }}
           >
             <CanvasEnv />
