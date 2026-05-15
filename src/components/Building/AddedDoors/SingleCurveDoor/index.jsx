@@ -1,25 +1,18 @@
 import * as THREE from 'three';
 import React from 'react'
-import {
-  useAppSelector,
-  selectBuildingWidth,
-  selectBuildingHeight,
-} from '../../../store';
-import {extrudeSetting} from '../../../utils/Function';
 import {TextureLoader} from 'three'
 import {useLoader} from '@react-three/fiber';
+
+import { useSelector } from 'react-redux';
+import {extrudeSetting} from '../../../../utils/Function';
 import shedTexture from '../../../assets/imgs/horizontal_hardie_plank.jpg';
 
-const CurvedoorModel=() => {
+const SingleCurveDoor=() => {
 
-	const width=useAppSelector(selectBuildingWidth);
-	const height=useAppSelector(selectBuildingHeight);
+	const width = useSelector((state) => state.building.buildingWidth);
+	const height = useSelector((state) => state.building.buildingHeight);
 	const outTrimThk=5;
 	const inTrimThk=3;
-	const scaleX=20;
-	const scaleY=21;
-	const doorWidth=width*scaleX;
-	const doorHeight=height*scaleY;
 	const railPadding=4;
 
 	const colorMap=useLoader(TextureLoader,shedTexture)
@@ -30,31 +23,31 @@ const CurvedoorModel=() => {
 	colorMap.flipY=false;
 
 	const outTrimShape=new THREE.Shape();
-	outTrimShape.moveTo(-doorWidth/2,0);
-	outTrimShape.lineTo(-doorWidth/2,doorHeight/4*3);
-	outTrimShape.quadraticCurveTo(-doorWidth/2,doorHeight,0,doorHeight);
-	outTrimShape.quadraticCurveTo(doorWidth/2,doorHeight,doorWidth/2,doorHeight/4*3);
-	outTrimShape.lineTo(doorWidth/2,0);
-	outTrimShape.lineTo(doorWidth/2-outTrimThk,0);
-	outTrimShape.lineTo(doorWidth/2-outTrimThk,doorHeight/4*3);
-	outTrimShape.quadraticCurveTo(doorWidth/2-outTrimThk,doorHeight-outTrimThk,0,doorHeight-outTrimThk);
-	outTrimShape.quadraticCurveTo(-doorWidth/2+outTrimThk,doorHeight-outTrimThk,-doorWidth/2+outTrimThk,doorHeight/4*3);
-	outTrimShape.lineTo(-doorWidth/2+outTrimThk,0);
+	outTrimShape.moveTo(-width/2,0);
+	outTrimShape.lineTo(-width/2,height/4*3);
+	outTrimShape.quadraticCurveTo(-width/2,height,0,height);
+	outTrimShape.quadraticCurveTo(width/2,height,width/2,height/4*3);
+	outTrimShape.lineTo(width/2,0);
+	outTrimShape.lineTo(width/2-outTrimThk,0);
+	outTrimShape.lineTo(width/2-outTrimThk,height/4*3);
+	outTrimShape.quadraticCurveTo(width/2-outTrimThk,height-outTrimThk,0,height-outTrimThk);
+	outTrimShape.quadraticCurveTo(-width/2+outTrimThk,height-outTrimThk,-width/2+outTrimThk,height/4*3);
+	outTrimShape.lineTo(-width/2+outTrimThk,0);
 	outTrimShape.closePath();
 
-	const innerWidth=doorWidth-outTrimThk*2;
-	const innerHeight=doorHeight-outTrimThk;
+	const innerWidth=width-outTrimThk*2;
+	const innerHeight=height-outTrimThk;
 
 	const inTrimShape=new THREE.Shape();
 	inTrimShape.moveTo(-innerWidth/2,0);
-	inTrimShape.lineTo(-innerWidth/2,doorHeight/4*3);
+	inTrimShape.lineTo(-innerWidth/2,height/4*3);
 	inTrimShape.quadraticCurveTo(-innerWidth/2,innerHeight,0,innerHeight);
-	inTrimShape.quadraticCurveTo(innerWidth/2,innerHeight,innerWidth/2,doorHeight/4*3);
+	inTrimShape.quadraticCurveTo(innerWidth/2,innerHeight,innerWidth/2,height/4*3);
 	inTrimShape.lineTo(innerWidth/2,0);
 	inTrimShape.lineTo(innerWidth/2-inTrimThk,0);
-	inTrimShape.lineTo(innerWidth/2-inTrimThk,doorHeight/4*3);
+	inTrimShape.lineTo(innerWidth/2-inTrimThk,height/4*3);
 	inTrimShape.quadraticCurveTo(innerWidth/2-inTrimThk,innerHeight-inTrimThk,0,innerHeight-inTrimThk);
-	inTrimShape.quadraticCurveTo(-innerWidth/2+inTrimThk,innerHeight-inTrimThk,-innerWidth/2+inTrimThk,doorHeight/4*3);
+	inTrimShape.quadraticCurveTo(-innerWidth/2+inTrimThk,innerHeight-inTrimThk,-innerWidth/2+inTrimThk,height/4*3);
 	inTrimShape.lineTo(-innerWidth/2+inTrimThk,0);
 	inTrimShape.closePath();
 
@@ -70,17 +63,17 @@ const CurvedoorModel=() => {
 
 	const innerDoorShape=new THREE.Shape();
 	innerDoorShape.moveTo(-innerDoorWidth/2,inTrimThk);
-	innerDoorShape.lineTo(-innerDoorWidth/2,doorHeight/4*3);
+	innerDoorShape.lineTo(-innerDoorWidth/2,height/4*3);
 	innerDoorShape.quadraticCurveTo(-innerDoorWidth/2,innerDoorHeight,0,innerDoorHeight);
-	innerDoorShape.quadraticCurveTo(innerDoorWidth/2,innerDoorHeight,innerDoorWidth/2,doorHeight/4*3);
+	innerDoorShape.quadraticCurveTo(innerDoorWidth/2,innerDoorHeight,innerDoorWidth/2,height/4*3);
 	innerDoorShape.lineTo(innerDoorWidth/2,inTrimThk);
 	innerDoorShape.closePath();
 
 	const midTrimShape=new THREE.Shape();
-	midTrimShape.moveTo(-innerWidth/2+inTrimThk,doorHeight*2/5);
-	midTrimShape.lineTo(-innerWidth/2+inTrimThk,doorHeight*2/5+inTrimThk);
-	midTrimShape.lineTo(innerWidth/2-inTrimThk,doorHeight*2/5+inTrimThk);
-	midTrimShape.lineTo(innerWidth/2-inTrimThk,doorHeight*2/5);
+	midTrimShape.moveTo(-innerWidth/2+inTrimThk,height*2/5);
+	midTrimShape.lineTo(-innerWidth/2+inTrimThk,height*2/5+inTrimThk);
+	midTrimShape.lineTo(innerWidth/2-inTrimThk,height*2/5+inTrimThk);
+	midTrimShape.lineTo(innerWidth/2-inTrimThk,height*2/5);
 	midTrimShape.closePath();
 
 	innerDoorShape.holes.push(midTrimShape);
@@ -91,10 +84,10 @@ const CurvedoorModel=() => {
 	[-1,1].forEach(dir => {
 
 		const railtopShape=new THREE.Shape();
-		railtopShape.moveTo(dir*(innerWidth/2-inTrimThk),(doorHeight*2/5)-railPadding-inTrimThk);
-		railtopShape.lineTo(dir*(innerWidth/2-inTrimThk),(doorHeight*2/5)-railPadding);
-		railtopShape.lineTo(dir*(innerWidth/2-inTrimThk-railPadding),doorHeight*2/5);
-		railtopShape.lineTo(dir*(innerWidth/2-inTrimThk-railPadding)-dir*inTrimThk,doorHeight*2/5);
+		railtopShape.moveTo(dir*(innerWidth/2-inTrimThk),(height*2/5)-railPadding-inTrimThk);
+		railtopShape.lineTo(dir*(innerWidth/2-inTrimThk),(height*2/5)-railPadding);
+		railtopShape.lineTo(dir*(innerWidth/2-inTrimThk-railPadding),height*2/5);
+		railtopShape.lineTo(dir*(innerWidth/2-inTrimThk-railPadding)-dir*inTrimThk,height*2/5);
 		railtopShape.closePath();
 
 		const railBottomShape=new THREE.Shape();
@@ -112,10 +105,10 @@ const CurvedoorModel=() => {
 	});
 
 	const topRailShape=new THREE.Shape();
-	topRailShape.moveTo(-innerWidth/2+inTrimThk,doorHeight*5/7);
-	topRailShape.lineTo(-innerWidth/2+inTrimThk,doorHeight*5/7-inTrimThk);
-	topRailShape.lineTo(-innerWidth/2+inTrimThk+inTrimThk*4,doorHeight*5/7-inTrimThk);
-	topRailShape.quadraticCurveTo(-innerWidth/2+inTrimThk+inTrimThk*4+2,doorHeight*5/7-inTrimThk+inTrimThk/2,-innerWidth/2+inTrimThk+inTrimThk*4,doorHeight*5/7);
+	topRailShape.moveTo(-innerWidth/2+inTrimThk,height*5/7);
+	topRailShape.lineTo(-innerWidth/2+inTrimThk,height*5/7-inTrimThk);
+	topRailShape.lineTo(-innerWidth/2+inTrimThk+inTrimThk*4,height*5/7-inTrimThk);
+	topRailShape.quadraticCurveTo(-innerWidth/2+inTrimThk+inTrimThk*4+2,height*5/7-inTrimThk+inTrimThk/2,-innerWidth/2+inTrimThk+inTrimThk*4,height*5/7);
 	topRailShape.closePath();
 
 	innerDoorShape.holes.push(topRailShape);
@@ -171,4 +164,4 @@ const CurvedoorModel=() => {
 	)
 }
 
-export default CurvedoorModel
+export default SingleCurveDoor

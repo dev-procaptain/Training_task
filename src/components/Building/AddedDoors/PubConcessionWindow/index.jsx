@@ -1,23 +1,22 @@
 import * as THREE from 'three';
-import {extrudeSetting} from '../../../utils/Function';
 import {useMemo} from 'react';
-import { useAppSelector, selectBuildingWidth, selectBuildingHeight } from '../../../store';
 
-const WindowModel=() => {
+import {extrudeSetting} from '../../../../utils/Function';
+import { useSelector } from 'react-redux';
 
-	const width=useAppSelector(selectBuildingWidth);
-	const height=useAppSelector(selectBuildingHeight);
-	const scaleX=20;
-	const scaleY=21;
+const PubConcessionWindow=() => {
+
+	const width = useSelector((state) => state.building.buildingWidth);
+	const height = useSelector((state) => state.building.buildingHeight);
 	const trimWidth=0.3;
 	const gap=0.1;
-	const trimThk=trimWidth*scaleX;
-	const offset=trimWidth*1.5*scaleX;
+	const trimThk=trimWidth;
+	const offset=trimWidth*1.5;
 
 	const outTrimModel=useMemo(() => {
 
-		const topTrimShapeWidth=width*scaleX-offset*2+4;
-		const topTrimShapeHeight=height*scaleY;
+		const topTrimShapeWidth=width-offset*2+4;
+		const topTrimShapeHeight=height;
 		const topTrimShape=new THREE.Shape();
 		topTrimShape.moveTo(-topTrimShapeWidth/2,topTrimShapeHeight);
 		topTrimShape.lineTo(-topTrimShapeWidth/2,topTrimShapeHeight-trimThk);
@@ -26,8 +25,8 @@ const WindowModel=() => {
 		topTrimShape.closePath();
 
 		const sideShape=[];
-		const sideTrimShapeWidth=width*scaleX/2-offset;
-		const sideTrimShapeHeight=height*scaleY-trimThk-gap;
+		const sideTrimShapeWidth=width/2-offset;
+		const sideTrimShapeHeight=height-trimThk-gap;
 		[-1,1].forEach(dir => {
 			const sideTrimShape=new THREE.Shape();
 			sideTrimShape.moveTo(dir*sideTrimShapeWidth,gap);
@@ -47,8 +46,8 @@ const WindowModel=() => {
 
 	const gapModel=useMemo(() => {
 
-		const gapTopShapeWidth=width*scaleX-offset*2;
-		const gapTopShapeHeight=height*scaleY-trimThk;
+		const gapTopShapeWidth=width-offset*2;
+		const gapTopShapeHeight=height-trimThk;
 		const gapTopShape=new THREE.Shape();
 		gapTopShape.moveTo(-gapTopShapeWidth/2,gapTopShapeHeight);
 		gapTopShape.lineTo(-gapTopShapeWidth/2,gapTopShapeHeight-gap);
@@ -56,7 +55,7 @@ const WindowModel=() => {
 		gapTopShape.lineTo(gapTopShapeWidth/2,gapTopShapeHeight);
 		gapTopShape.closePath();
 
-		const gapBottomShapeWidth=width*scaleX-offset*2;
+		const gapBottomShapeWidth=width-offset*2;
 		const gapBottomShape=new THREE.Shape();
 		gapBottomShape.moveTo(-gapBottomShapeWidth/2,gapTopShapeHeight);
 		gapBottomShape.lineTo(-gapBottomShapeWidth/2,gapTopShapeHeight-gap);
@@ -64,8 +63,8 @@ const WindowModel=() => {
 		gapBottomShape.lineTo(gapBottomShapeWidth/2,gapTopShapeHeight);
 		gapBottomShape.closePath();
 
-		const gapSideShapeWidth=width*scaleX-offset*2-trimThk*2;
-		const gapSideShapeHeight=height*scaleY-trimThk-gap;
+		const gapSideShapeWidth=width-offset*2-trimThk*2;
+		const gapSideShapeHeight=height-trimThk-gap;
 		const gapSide=[];
 
 		[-1,1].forEach(dir => {
@@ -87,8 +86,8 @@ const WindowModel=() => {
 	},[width,height])
 
 	const inTrimModel=useMemo(() => {
-		const inTrimShapeWidth=width*scaleX-offset*2-gap*2-trimThk*2;
-		const inTrimShapeHeight=height*scaleY-trimThk-gap;
+		const inTrimShapeWidth=width-offset*2-gap*2-trimThk*2;
+		const inTrimShapeHeight=height-trimThk-gap;
 		const inTrimShape=new THREE.Shape();
 		inTrimShape.moveTo(-inTrimShapeWidth/2,inTrimShapeHeight);
 		inTrimShape.lineTo(inTrimShapeWidth/2,inTrimShapeHeight);
@@ -113,8 +112,8 @@ const WindowModel=() => {
 	},[width,height])
 
 	const panelModel=useMemo(() => {
-		const panelShapeWidth=width*scaleX-offset*2-gap*2-trimThk*2;
-		const panelShapHeight=height*scaleY-trimThk-gap;
+		const panelShapeWidth=width-offset*2-gap*2-trimThk*2;
+		const panelShapHeight=height-trimThk-gap;
 		const panelShapeModel=[];
 		[-1,1].forEach(dir => {
 			const panelShape=new THREE.Shape();
@@ -132,7 +131,7 @@ const WindowModel=() => {
 	},[width,height])
 
 	const BottomModel=useMemo(() => {
-		const bottomModelWidth=width*scaleX;
+		const bottomModelWidth=width;
 		const bottomModelHeight=trimThk*1.5;
 
 		const bottomModelShape=new THREE.Shape();
@@ -168,7 +167,7 @@ const WindowModel=() => {
 			bottomGap.push(bottomGapShape);
 		})
 
-		const bottomMidModelWidth=width*scaleX-offset*2-gap*2-trimThk/3*4;
+		const bottomMidModelWidth=width-offset*2-gap*2-trimThk/3*4;
 		const bottomMidShape=new THREE.Shape();
 		bottomMidShape.moveTo(-bottomModelWidth/2,bottomModelHeight+trimThk);
 		bottomMidShape.lineTo(-bottomMidModelWidth/2,(bottomModelHeight+trimThk)/4*3);
@@ -186,7 +185,7 @@ const WindowModel=() => {
 	},[width,height])
 
 	const underModel=useMemo(() => {
-		const underModelWidth=width*scaleX-offset;
+		const underModelWidth=width-offset;
 		const underModelHeight=trimThk*1.5+trimThk;
 		const underModelShape=new THREE.Shape();
 		underModelShape.moveTo(-underModelWidth/2,0);
@@ -217,7 +216,7 @@ const WindowModel=() => {
 					<extrudeGeometry args={[gapModel.gapSide,extrudeSetting(5)]} />
 					<meshPhongMaterial color={'black'} />
 				</mesh>
-				<mesh position={[0,-(height*scaleY-trimThk-gap),0]}>
+				<mesh position={[0,-(height-trimThk-gap),0]}>
 					<extrudeGeometry args={[gapModel.gapBottomShape,extrudeSetting(5)]} />
 					<meshPhongMaterial color={'black'} />
 				</mesh>
@@ -250,4 +249,4 @@ const WindowModel=() => {
 	)
 }
 
-export default WindowModel;
+export default PubConcessionWindow;

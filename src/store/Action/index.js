@@ -16,11 +16,29 @@ export const setBuildingWidth = (width) => {
   };
 };
 
+export const setBuildingLength = (length) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_BUILDING_LENGTH',
+      payload: length,
+    });
+  };
+};
+
 export const setBuildingHeight = (height) => {
   return (dispatch) => {
     dispatch({
       type: 'SET_BUILDING_HEIGHT',
       payload: height,
+    });
+  };
+};
+
+export const setBuildingPitch = (pitch) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_BUILDING_PITCH',
+      payload: pitch,
     });
   };
 };

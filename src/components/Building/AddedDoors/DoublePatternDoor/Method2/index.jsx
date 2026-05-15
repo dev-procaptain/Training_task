@@ -1,13 +1,12 @@
 import * as THREE from 'three';
 import React,{useMemo} from 'react'
-import { useAppSelector, selectBuildingWidth, selectBuildingHeight } from '../../../../store';
-import {extrudeSetting} from '../../../../utils/Function';
 
-const Method1=() => {
-	const width=useAppSelector(selectBuildingWidth);
-	const height=useAppSelector(selectBuildingHeight);
-	const scaleX=20;
-	const scaleY=21;
+import { useSelector } from 'react-redux';
+import {extrudeSetting} from '../../../../../utils/Function';
+
+const Method2=() => {
+	const width = useSelector((state) => state.building.buildingWidth);
+	const height = useSelector((state) => state.building.buildingHeight);
 	const trimModelThk=4;
 	const innerTrimModelThk=6;
 	const bottomTrimThk=2;
@@ -15,14 +14,13 @@ const Method1=() => {
 	const windowTrimThk=3;
 	const glassTrimThk=1;
 	const piecePatternCountX=5;
-	const patternContX=4;
-	const countY=5;
-	const glassCoutX=patternContX/windowCountX;
+	const glassCoutX=2;
+	let countY=4;
+	let patternContX=2;
 
 	const trimModel=useMemo(() => {
-		const trimModelWidth=width*scaleX;
-		const trimModelHeight=height*scaleY;
-		//const trimModelThk=trimThk*scaleX;
+		const trimModelWidth=width;
+		const trimModelHeight=height;
 		const trimSideModelArr=[];
 
 		[-1,1].forEach(dir => {
@@ -54,14 +52,24 @@ const Method1=() => {
 		return {
 			trimSideModelArr,
 			trimMidModelShape,
-
 		}
 
 	},[width,height])
 
 	const innerModel=useMemo(() => {
-		const innerModelWidth=width*scaleX-trimModelThk*2;
-		const innerModelHeight=height*scaleY-trimModelThk;
+		const innerModelWidth=width-trimModelThk*2;
+		const innerModelHeight=height-trimModelThk;
+		const windowModelwidth=(innerModelWidth-innerTrimModelThk*(windowCountX+2))/windowCountX;
+		const windowModelHeight=20;
+		const patternModelWidth=14
+		const patternModelHeight=10;
+		const patternAreaHeight=(innerModelHeight-innerTrimModelThk-windowModelHeight)
+		const glassAreaModelWidth=windowModelwidth-windowTrimThk*2;
+		const glassAreaModelHeight=windowModelHeight-windowTrimThk*2;
+		const glassModelWidth=(glassAreaModelWidth-glassTrimThk*(glassCoutX+1))/glassCoutX;
+		const glassModelHeight=(glassAreaModelHeight-glassTrimThk*3)/2;
+		const piecePatternModelWidth=(patternModelWidth-glassTrimThk*(piecePatternCountX+1))/piecePatternCountX;
+		const piecePatternModelHeight=patternModelHeight-glassTrimThk*2;
 
 		const innerModelShape=new THREE.Shape();
 		innerModelShape.moveTo(-innerModelWidth/2,innerModelHeight);
@@ -69,18 +77,6 @@ const Method1=() => {
 		innerModelShape.lineTo(innerModelWidth/2,bottomTrimThk);
 		innerModelShape.lineTo(-innerModelWidth/2,bottomTrimThk);
 		innerModelShape.closePath();
-
-		const windowModelwidth=(innerModelWidth-innerTrimModelThk*(windowCountX+2))/windowCountX;
-		const windowModelHeight=(innerModelHeight-innerTrimModelThk*(countY+1))/countY;
-		const patternModelWidth=(innerModelWidth-innerTrimModelThk*(patternContX+2))/patternContX;
-		const patternAreaHeight=(innerModelHeight-innerTrimModelThk-windowModelHeight)
-		const patternModelHeight=(innerModelHeight-innerTrimModelThk*(countY+1))/countY;
-		const glassAreaModelWidth=windowModelwidth-windowTrimThk*2;
-		const glassAreaModelHeight=windowModelHeight-windowTrimThk*2;
-		const glassModelWidth=(glassAreaModelWidth-glassTrimThk*(glassCoutX+1))/glassCoutX;
-		const glassModelHeight=(glassAreaModelHeight-glassTrimThk*3)/2;
-		const piecePatternModelWidth=(patternModelWidth-glassTrimThk*(piecePatternCountX+1))/piecePatternCountX;
-		const piecePatternModelHeight=patternModelHeight-glassTrimThk*2;
 
 		let windowModel=[];
 		let patternModel=[];
@@ -125,18 +121,37 @@ const Method1=() => {
 				}
 			}
 
-			for(let col=0;col<countY-1;col++) {
-				for(let row=0;row<glassCoutX;row++) {
+			//while(
+			//	innerModelWidth/2-(patternContX*(patternModelWidth+innerTrimModelThk))>patternModelWidth+innerTrimModelThk*2) {
+			//	patternContX++;
+			//}
+
+			//while(
+			//	patternAreaHeight-((countY-1)*(patternModelHeight+innerTrimModelThk))>patternModelHeight+innerTrimModelThk) {
+			//	countY++;
+			//}
+
+			patternContX=Math.floor((innerModelWidth/2-innerTrimModelThk)/(patternModelWidth+innerTrimModelThk));
+
+			countY=Math.floor((patternAreaHeight-innerTrimModelThk)/(patternModelHeight+innerTrimModelThk));
+
+			const patternBetweenX=(innerModelWidth/2-innerTrimModelThk*2-patternModelWidth*patternContX)/(patternContX-1);
+
+			const patternBetweenY=(patternAreaHeight-innerTrimModelThk*2-patternModelHeight*countY)/(countY-1);
+
+			for(let col=0;col<countY;col++) {
+				for(let row=0;row<patternContX;row++) {
 					const patternModelShape=new THREE.Shape();
 
-					patternModelShape.moveTo(dir*(innerModelWidth/2-innerTrimModelThk-row*(patternModelWidth+innerTrimModelThk)),patternAreaHeight-innerTrimModelThk-col*(patternModelHeight+innerTrimModelThk));
-					patternModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-patternModelWidth-row*(patternModelWidth+innerTrimModelThk)),patternAreaHeight-innerTrimModelThk-col*(patternModelHeight+innerTrimModelThk));
-					patternModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-patternModelWidth-row*(patternModelWidth+innerTrimModelThk)),patternAreaHeight-patternModelHeight-innerTrimModelThk-col*(patternModelHeight+innerTrimModelThk));
-					patternModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-row*(patternModelWidth+innerTrimModelThk)),patternAreaHeight-patternModelHeight-innerTrimModelThk-col*(patternModelHeight+innerTrimModelThk));
+					patternModelShape.moveTo(dir*(innerModelWidth/2-innerTrimModelThk-row*(patternModelWidth+patternBetweenX)),patternAreaHeight-innerTrimModelThk-col*(patternModelHeight+patternBetweenY));
+					patternModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-patternModelWidth-row*(patternModelWidth+patternBetweenX)),patternAreaHeight-innerTrimModelThk-col*(patternModelHeight+patternBetweenY));
+					patternModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-patternModelWidth-row*(patternModelWidth+patternBetweenX)),patternAreaHeight-patternModelHeight-innerTrimModelThk-col*(patternModelHeight+patternBetweenY));
+					patternModelShape.lineTo(dir*(innerModelWidth/2-innerTrimModelThk-row*(patternModelWidth+patternBetweenX)),patternAreaHeight-patternModelHeight-innerTrimModelThk-col*(patternModelHeight+patternBetweenY));
 					patternModelShape.closePath();
 
-					const innerPatternModelX=innerModelWidth/2-innerTrimModelThk-glassTrimThk-row*(innerTrimModelThk+patternModelWidth);
-					const innerPatternModelY=patternAreaHeight-innerTrimModelThk-glassTrimThk-col*(innerTrimModelThk+patternModelHeight);
+					const innerPatternModelX=innerModelWidth/2-innerTrimModelThk-glassTrimThk-row*(patternBetweenX+patternModelWidth);
+
+					const innerPatternModelY=patternAreaHeight-innerTrimModelThk-glassTrimThk-col*(patternBetweenY+patternModelHeight);
 
 					for(let row=0;row<piecePatternCountX;row++) {
 						const innerPatternModelShape=new THREE.Shape();
@@ -158,8 +173,6 @@ const Method1=() => {
 			windowModel.push(windowModelShape);
 		})
 
-
-
 		return {
 			innerModelShape,
 			windowModel,
@@ -172,7 +185,7 @@ const Method1=() => {
 	},[width,height])
 
 	const bottomModel=useMemo(() => {
-		const bottomModelWidth=width*scaleX-trimModelThk*2;
+		const bottomModelWidth=width-trimModelThk*2;
 
 		const bottomModelShape=new THREE.Shape();
 		bottomModelShape.moveTo(-bottomModelWidth/2,0);
@@ -218,7 +231,6 @@ const Method1=() => {
 					<meshStandardMaterial
 						color={'#4d4d4d'}
 						roughness={0}
-
 					/>
 				</mesh>
 				<mesh>
@@ -232,7 +244,6 @@ const Method1=() => {
 						//normalMap={patternMap}
 						roughness={0.8}
 						metalness={0}
-
 					/>
 				</mesh>
 			</group>
@@ -247,4 +258,4 @@ const Method1=() => {
 	)
 }
 
-export default Method1;
+export default Method2;

@@ -1,29 +1,48 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import {
-  useAppDispatch,
-  useAppSelector,
-  selectBuildingWidth,
-  selectBuildingHeight,
   setBuildingWidth,
+  setBuildingLength,
   setBuildingHeight,
+  setBuildingPitch,
 } from '../../store';
 
-const RangeSlider = ({ name, minValue, maxValue }) => {
-  const dispatch = useAppDispatch();
-  const buildingWidth = useAppSelector(selectBuildingWidth);
-  const buildingHeight = useAppSelector(selectBuildingHeight);
-  const isWidth = name === 'width';
-  const value = isWidth ? buildingWidth : buildingHeight;
+const SLIDER_CONFIG = {
+  width: {
+    select: (state) => state.building.buildingWidth,
+    set: setBuildingWidth,
+  },
+  length: {
+    select: (state) => state.building.buildingLength,
+    set: setBuildingLength,
+  },
+  height: {
+    select: (state) => state.building.buildingHeight,
+    set: setBuildingHeight,
+  },
+  pitch: {
+    select: (state) => state.building.buildingPitch,
+    set: setBuildingPitch,
+  },
+};
+
+const formatValue = (name, value, unit) => {
+  if (unit === 'pitch') {
+    return `${value}/12`;
+  }
+  return `${value.toFixed(1)} ${unit}`;
+};
+
+const RangeSlider = ({ name, minValue, maxValue, step = 10, unit = 'ft' }) => {
+  const dispatch = useDispatch();
+  const config = SLIDER_CONFIG[name];
+  const value = useSelector(config.select);
 
   const handleChange = (_, newValue) => {
-    if (isWidth) {
-      dispatch(setBuildingWidth(newValue));
-    } else {
-      dispatch(setBuildingHeight(newValue));
-    }
+    dispatch(config.set(newValue));
   };
 
   const label = name.charAt(0).toUpperCase() + name.slice(1);
@@ -42,17 +61,17 @@ const RangeSlider = ({ name, minValue, maxValue }) => {
           {label}
         </Typography>
         <Typography variant="body2" fontWeight={600} color="primary.main">
-          {value.toFixed(1)} m
+          {formatValue(name, value, unit)}
         </Typography>
       </Box>
       <Slider
         value={value}
         min={minValue}
         max={maxValue}
-        step={0.1}
+        step={step}
         onChange={handleChange}
         valueLabelDisplay="auto"
-        valueLabelFormat={(v) => `${v.toFixed(1)} m`}
+        valueLabelFormat={(v) => formatValue(name, v, unit)}
         size="small"
         aria-label={label}
       />
