@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import React from 'react'
-import {useStore} from '../../../store';
+import {
+  useAppSelector,
+  selectBuildingWidth,
+  selectBuildingHeight,
+} from '../../../store';
 import {extrudeSetting} from '../../../utils/Function';
 import {TextureLoader} from 'three'
 import {useLoader} from '@react-three/fiber';
@@ -8,9 +12,8 @@ import shedTexture from '../../../assets/imgs/horizontal_hardie_plank.jpg';
 
 const CurvedoorModel=() => {
 
-	const {sizeInfo}=useStore();
-	const width=sizeInfo['Curve_door'][0];
-	const height=sizeInfo['Curve_door'][1];
+	const width=useAppSelector(selectBuildingWidth);
+	const height=useAppSelector(selectBuildingHeight);
 	const outTrimThk=5;
 	const inTrimThk=3;
 	const scaleX=20;

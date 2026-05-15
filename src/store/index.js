@@ -1,29 +1,33 @@
-import {create} from "zustand";
+import { useDispatch, useSelector } from 'react-redux';
+import { DEFAULT_DIMENSIONS_BY_MODEL } from './Reducer';
+import appStore from './AppStore';
 
-export const initialData={
-	'SS1-T1211': [4,3],
-	'SS1-T1242': [5,4],
-	'Curve_door': [3,5],
-	'Truss': [15,8],
-}
+export const store = appStore;
+export {
+  MODEL_TYPES,
+  MODEL_TYPE_OPTIONS,
+  DEFAULT_DIMENSIONS_BY_MODEL,
+} from './Reducer';
+export {
+  setModelType,
+  setBuildingWidth,
+  setBuildingHeight,
+  setDoorMethod,
+} from './Action';
 
-export const useStore=create((set) => ({
-	sizeInfo: initialData,
-	changeSize: (info) => set({
-		sizeInfo: info
-	})
-}));
+export const useAppDispatch = () => useDispatch();
+export const useAppSelector = useSelector;
 
-export const taskStore=create((set) => ({
-	taskInfo: 'SS1-T1211',
-	setTaskInfo: (task) => set({
-		taskInfo: task
-	})
-}));
+export const selectModelType = (state) => state.building.modelType;
+export const selectBuildingWidth = (state) => state.building.buildingWidth;
+export const selectBuildingHeight = (state) => state.building.buildingHeight;
+export const selectDoorMethod = (state) => state.building.doorMethod;
+export const selectDimensionsByModel = (state) =>
+  DEFAULT_DIMENSIONS_BY_MODEL[state.building.modelType];
 
-export const methodStore=create((set) => ({
-	methodInfo: 'method1',
-	setMethodInfo: (method) => set({
-		methodInfo: method
-	})
-}));
+export const initialData = Object.fromEntries(
+  Object.entries(DEFAULT_DIMENSIONS_BY_MODEL).map(([key, { width, height }]) => [
+    key,
+    [width, height],
+  ])
+);

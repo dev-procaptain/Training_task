@@ -2,18 +2,28 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
-import { useStore } from '../../store';
+import {
+  useAppDispatch,
+  useAppSelector,
+  selectBuildingWidth,
+  selectBuildingHeight,
+  setBuildingWidth,
+  setBuildingHeight,
+} from '../../store';
 
-const RangeSlider = ({ name, minValue, maxValue, id }) => {
-  const { sizeInfo, changeSize } = useStore();
-  const index = name === 'width' ? 0 : 1;
-  const value = Number(sizeInfo[id][index]);
+const RangeSlider = ({ name, minValue, maxValue }) => {
+  const dispatch = useAppDispatch();
+  const buildingWidth = useAppSelector(selectBuildingWidth);
+  const buildingHeight = useAppSelector(selectBuildingHeight);
+  const isWidth = name === 'width';
+  const value = isWidth ? buildingWidth : buildingHeight;
 
   const handleChange = (_, newValue) => {
-    changeSize({
-      ...sizeInfo,
-      [id]: sizeInfo[id].map((v, i) => (i === index ? newValue : v)),
-    });
+    if (isWidth) {
+      dispatch(setBuildingWidth(newValue));
+    } else {
+      dispatch(setBuildingHeight(newValue));
+    }
   };
 
   const label = name.charAt(0).toUpperCase() + name.slice(1);

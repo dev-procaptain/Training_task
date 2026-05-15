@@ -1,21 +1,18 @@
 import React from 'react';
-import {taskStore} from "../../store"
-import DoorModel from "./Door";
-import WindowModel from "./Window";
+import { MODEL_TYPES, useAppSelector, selectModelType } from '../../store';
+import DoorModel from './Door';
+import WindowModel from './Window';
 import CurvedoorModel from './CurveDoor';
 import Truss from './Truss';
 
-const taskComponents={
-	'SS1-T1211': <WindowModel />,
-	'SS1-T1242': <DoorModel />,
-	'Curve_door': <CurvedoorModel />,
-	'Truss': <Truss />,
-}
+const taskComponents = {
+  [MODEL_TYPES.WINDOW]: <WindowModel />,
+  [MODEL_TYPES.DOOR]: <DoorModel />,
+  [MODEL_TYPES.CURVE_DOOR]: <CurvedoorModel />,
+  [MODEL_TYPES.TRUSS]: <Truss />,
+};
+
 export default function Building() {
-	const {taskInfo}=taskStore();
-	return (
-		<>
-			{taskComponents[taskInfo]}
-		</>
-	)
+  const modelType = useAppSelector(selectModelType);
+  return <>{taskComponents[modelType]}</>;
 }

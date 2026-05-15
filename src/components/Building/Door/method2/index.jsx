@@ -1,12 +1,11 @@
 import * as THREE from 'three';
 import React,{useMemo} from 'react'
-import {useStore} from '../../../../store';
+import { useAppSelector, selectBuildingWidth, selectBuildingHeight } from '../../../../store';
 import {extrudeSetting} from '../../../../utils/Function';
 
 const Method2=() => {
-	const {sizeInfo}=useStore();
-	const width=sizeInfo['SS1-T1242'][0];
-	const height=sizeInfo['SS1-T1242'][1];
+	const width=useAppSelector(selectBuildingWidth);
+	const height=useAppSelector(selectBuildingHeight);
 	const scaleX=20;
 	const scaleY=21;
 	const trimModelThk=4;

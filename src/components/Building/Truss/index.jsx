@@ -1,5 +1,5 @@
 import React,{useMemo} from 'react'
-import {useStore} from '../../../store'
+import { useAppSelector, selectBuildingWidth, selectBuildingHeight } from '../../../store';
 import * as THREE from 'three';
 import {extrudeSetting} from '../../../utils/Function';
 import legTexture from '../../../assets/imgs/leg_texture_old.jpg';
@@ -7,12 +7,11 @@ import {TextureLoader} from 'three'
 import {useLoader} from '@react-three/fiber';
 
 const Truss=() => {
-	const {sizeInfo}=useStore();
+	const width=useAppSelector(selectBuildingWidth);
+	const height=useAppSelector(selectBuildingHeight);
 	const scaleX=10;
 	const scaleY=11;
-	const width=sizeInfo['Truss'][0];
-	const height=sizeInfo['Truss'][1];
-	const length=sizeInfo['Truss'][0]*1.5;
+	const length=width*1.5;
 	const dstRailL=30;
 	const pitchRatio=8/12;
 	const railWidth=4;

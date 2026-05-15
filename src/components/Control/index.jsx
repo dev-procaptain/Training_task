@@ -1,6 +1,5 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -14,38 +13,48 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import TuneIcon from '@mui/icons-material/Tune';
 import ViewInArIcon from '@mui/icons-material/ViewInAr';
-import { initialData, methodStore, taskStore } from '../../store';
+import {
+  MODEL_TYPE_OPTIONS,
+  MODEL_TYPES,
+  useAppDispatch,
+  useAppSelector,
+  selectModelType,
+  selectDoorMethod,
+  setModelType,
+  setDoorMethod,
+} from '../../store';
 import RangeSlider from '../RangeSlider';
 
 const UIData = {
-  'SS1-T1211': [
-    { name: 'width', minValue: 3, maxValue: 6, id: 'SS1-T1211' },
-    { name: 'height', minValue: 1, maxValue: 3, id: 'SS1-T1211' },
+  [MODEL_TYPES.WINDOW]: [
+    { name: 'width', minValue: 3, maxValue: 6 },
+    { name: 'height', minValue: 1, maxValue: 3 },
   ],
-  'SS1-T1242': [
-    { name: 'width', minValue: 5, maxValue: 16, id: 'SS1-T1242' },
-    { name: 'height', minValue: 4, maxValue: 14, id: 'SS1-T1242' },
+  [MODEL_TYPES.DOOR]: [
+    { name: 'width', minValue: 5, maxValue: 16 },
+    { name: 'height', minValue: 4, maxValue: 14 },
   ],
-  Curve_door: [
-    { name: 'width', minValue: 3, maxValue: 6, id: 'Curve_door' },
-    { name: 'height', minValue: 5, maxValue: 10, id: 'Curve_door' },
+  [MODEL_TYPES.CURVE_DOOR]: [
+    { name: 'width', minValue: 3, maxValue: 6 },
+    { name: 'height', minValue: 5, maxValue: 10 },
   ],
-  Truss: [
-    { name: 'width', minValue: 20, maxValue: 30, id: 'Truss' },
-    { name: 'height', minValue: 10, maxValue: 20, id: 'Truss' },
+  [MODEL_TYPES.TRUSS]: [
+    { name: 'width', minValue: 20, maxValue: 30 },
+    { name: 'height', minValue: 10, maxValue: 20 },
   ],
 };
 
 const TASK_LABELS = {
-  'SS1-T1211': 'Window',
-  'SS1-T1242': 'Door',
-  Curve_door: 'Curved door',
-  Truss: 'Truss',
+  [MODEL_TYPES.WINDOW]: 'Window',
+  [MODEL_TYPES.DOOR]: 'Door',
+  [MODEL_TYPES.CURVE_DOOR]: 'Curved door',
+  [MODEL_TYPES.TRUSS]: 'Truss',
 };
 
 const Control = () => {
-  const { taskInfo, setTaskInfo } = taskStore();
-  const { methodInfo, setMethodInfo } = methodStore();
+  const dispatch = useAppDispatch();
+  const modelType = useAppSelector(selectModelType);
+  const doorMethod = useAppSelector(selectDoorMethod);
 
   return (
     <Paper
@@ -94,11 +103,11 @@ const Control = () => {
               <Select
                 labelId="task-select-label"
                 id="task-select"
-                value={taskInfo}
+                value={modelType}
                 label="Model"
-                onChange={(e) => setTaskInfo(e.target.value)}
+                onChange={(e) => dispatch(setModelType(e.target.value))}
               >
-                {Object.keys(initialData).map((key) => (
+                {MODEL_TYPE_OPTIONS.map((key) => (
                   <MenuItem key={key} value={key}>
                     {`${TASK_LABELS[key] ?? key} (${key})`}
                   </MenuItem>
@@ -106,26 +115,25 @@ const Control = () => {
               </Select>
             </FormControl>
           </section>
+
           <Divider />
+
           <section>
             <Stack direction="row" alignItems="center" spacing={0.75} sx={{ mb: 1.5 }}>
               <TuneIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
               <Typography variant="subtitle2">Building Dimensions</Typography>
             </Stack>
-            {UIData[taskInfo].map((element) => (
+            {UIData[modelType].map((element) => (
               <RangeSlider
-                key={`${element.id}-${element.name}`}
+                key={`${modelType}-${element.name}`}
                 name={element.name}
-                id={element.id}
                 minValue={element.minValue}
                 maxValue={element.maxValue}
               />
             ))}
           </section>
 
-          <Divider />
-
-          {taskInfo === 'SS1-T1242' && (
+          {modelType === MODEL_TYPES.DOOR && (
             <>
               <Divider />
               <section>
@@ -133,8 +141,8 @@ const Control = () => {
                   Door build method
                 </Typography>
                 <RadioGroup
-                  value={methodInfo}
-                  onChange={(e) => setMethodInfo(e.target.value)}
+                  value={doorMethod}
+                  onChange={(e) => dispatch(setDoorMethod(e.target.value))}
                 >
                   <FormControlLabel
                     value="method1"

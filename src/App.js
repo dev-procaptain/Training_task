@@ -16,7 +16,7 @@ function App() {
             camera={{
               fov: 45,
               near: 0.1,
-              far: 1000,
+              far: 100000,
               aspect: window.innerWidth/window.innerHeight,
               position: [0,10,200]
             }}

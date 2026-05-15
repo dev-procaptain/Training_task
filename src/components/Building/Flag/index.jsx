@@ -1,11 +1,10 @@
 import * as THREE from 'three';
 import React from 'react'
-import {useStore} from '../../../store';
+import { useAppSelector, selectBuildingWidth, selectBuildingHeight } from '../../../store';
 
 const FlagModel=() => {
-	const {sizeInfo}=useStore();
-	const width=sizeInfo['Flag'][0];
-	const height=sizeInfo['Flag'][1];
+	const width=useAppSelector(selectBuildingWidth);
+	const height=useAppSelector(selectBuildingHeight);
 
 	const outTrimShape=new THREE.Shape();
 	outTrimShape.moveTo()

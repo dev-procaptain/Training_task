@@ -1,15 +1,14 @@
 import * as THREE from 'three';
 import {extrudeSetting} from '../../../utils/Function';
 import {useMemo} from 'react';
-import {useStore} from '../../../store';
+import { useAppSelector, selectBuildingWidth, selectBuildingHeight } from '../../../store';
 
 const WindowModel=() => {
 
-	const {sizeInfo}=useStore();
+	const width=useAppSelector(selectBuildingWidth);
+	const height=useAppSelector(selectBuildingHeight);
 	const scaleX=20;
 	const scaleY=21;
-	const width=sizeInfo['SS1-T1211'][0];
-	const height=sizeInfo['SS1-T1211'][1];
 	const trimWidth=0.3;
 	const gap=0.1;
 	const trimThk=trimWidth*scaleX;
