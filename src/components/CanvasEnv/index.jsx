@@ -11,7 +11,7 @@ const CanvasEnv=() => {
                 enableDamping
                 dampingFactor={0.05}
                 minDistance={100}
-                maxDistance={700}
+                maxDistance={1000}
             />
             <Environment preset="city" background backgroundBlurriness={1} backgroundIntensity={2} />
 

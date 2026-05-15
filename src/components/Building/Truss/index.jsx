@@ -2,61 +2,228 @@ import React,{useMemo} from 'react'
 import {useStore} from '../../../store'
 import * as THREE from 'three';
 import {extrudeSetting} from '../../../utils/Function';
-import {CSG} from '../../../assets/libs';
 
 const Truss=() => {
 	const {sizeInfo}=useStore();
-	const scaleX=20;
-	const scaleY=21;
+	const scaleX=10;
+	const scaleY=11;
 	const width=sizeInfo['Truss'][0];
 	const height=sizeInfo['Truss'][1];
-	const length=30;
+	const length=sizeInfo['Truss'][0]*1.5;
+	const dstRailL=30;
+	const pitchRatio=8/12;
+	const railWidth=4;
+	const railThickness=3;
+
+	const doorHeight=height*scaleY;
+	const doorWidth=width*scaleX;
+	const doorLength=length*scaleY;
+	const roofHeight=doorWidth/2*pitchRatio;
+	const roofMidHeight=doorWidth/2*5/12;
 
 	const baseModel=useMemo(() => {
-		const baseWidth=width*scaleX;
-		const baseHeight=height*scaleY;
-		const baseLength=length*scaleY;
 
 		const baseShape=new THREE.Shape();
-		baseShape.moveTo(-baseWidth/2-0.5,-baseLength/2-1.5);
-		baseShape.lineTo(-baseWidth/2-0.5,baseLength/2+1.5);
-		baseShape.lineTo(baseWidth/2+0.5,baseLength+1.5);
-		baseShape.lineTo(baseWidth/2+0.5,-baseLength-1.5);
+		baseShape.moveTo(-doorWidth/2,-doorLength/2);
+		baseShape.lineTo(-doorWidth/2,doorLength/2);
+		baseShape.lineTo(doorWidth/2,doorLength/2);
+		baseShape.lineTo(doorWidth/2,-doorLength/2);
 		baseShape.closePath();
 
-		const baseCutShape=new THREE.Shape();
-		baseCutShape.lineTo(-baseShape/2,-baseLength/2);
-		baseCutShape.lineTo(-baseWidth/2,baseLength/2);
-		baseCutShape.lineTo(baseWidth/2,baseLength/2);
-		baseCutShape.lineTo(baseWidth/2,-baseLength/2);
+		const baseCutShape=new THREE.Path();
+		baseCutShape.moveTo(-doorWidth/2+5,-doorLength/2+5);
+		baseCutShape.lineTo(-doorWidth/2+5,doorLength/2-5);
+		baseCutShape.lineTo(doorWidth/2-5,doorLength/2-5);
+		baseCutShape.lineTo(doorWidth/2-5,-doorLength/2+5);
 		baseCutShape.closePath();
 
-		const geometry1=new THREE.ExtrudeGeometry(baseShape,extrudeSetting(5));
-		const material1=new THREE.MeshBasicMaterial({color: 0x00ff00});
-		const mesh1=new THREE.Mesh(geometry1,material1);
+		baseShape.holes.push(baseCutShape);
 
-		const geometry2=new THREE.ExtrudeGeometry(baseCutShape,extrudeSetting(5));
-		const material2=new THREE.MeshBasicMaterial({color: 0x00ff00});
-		const mesh2=new THREE.Mesh(geometry2,material2);
+		return baseShape;
+	},[doorWidth,doorLength])
 
-		mesh1.updateMatrix();
-		mesh2.updateMatrix();
+	const baseSideRail=useMemo(() => {
+		const baseRailModel=[];
+		const roofTrussModel=[];
+		const roofMidTrussModel=[];
+		const roofTrussGap=[];
 
-		const mesh1CSG=CSG.fromMesh(mesh1);
-		const mesh2CSG=CSG.fromMesh(mesh2);
+		const startY=doorLength/2-1.5;
+		const usableLength=doorLength-3;
+		const railCount=Math.floor(usableLength/dstRailL);
+		const spacing=(usableLength-railThickness*railCount)/(railCount-1);
 
-		const subtractCSG=mesh1CSG.subtract(mesh2CSG);
-		const resultGeometry=CSG.toGeometry(subtractCSG);
+		for(let row=0;row<railCount;row++) {
+			const y=startY-row*(railThickness+spacing);
+			const z=spacing+railThickness;
+			const rightShape=new THREE.Shape();
 
-		return resultGeometry;
+			rightShape.moveTo(doorWidth/2-1,y);
+			rightShape.lineTo(doorWidth/2-1-railWidth,y);
+			rightShape.lineTo(doorWidth/2-1-railWidth,y-railThickness);
+			rightShape.lineTo(doorWidth/2-1,y-railThickness);
+			rightShape.closePath();
+			baseRailModel.push(rightShape);
+
+			const leftShape=new THREE.Shape();
+
+			leftShape.moveTo(-doorWidth/2+1,y);
+			leftShape.lineTo(-doorWidth/2+1+railWidth,y);
+			leftShape.lineTo(-doorWidth/2+1+railWidth,y-railThickness);
+			leftShape.lineTo(-doorWidth/2+1,y-railThickness);
+			leftShape.closePath();
+
+			baseRailModel.push(leftShape);
+
+			[-1,1].forEach(dir => {
+				const roofTrussshape=new THREE.Shape();
+				roofTrussshape.moveTo(dir*(doorWidth/2-1),0);
+				roofTrussshape.lineTo(dir*(doorWidth/2-5),0);
+				roofTrussshape.lineTo(0,roofHeight);
+				roofTrussshape.lineTo(0,roofHeight+4);
+				roofTrussshape.closePath();
+
+				roofTrussModel.push(roofTrussshape);
+			})
+			roofTrussGap.push(z);
+
+			const roofMidTrussShape=new THREE.Shape();
+			roofMidTrussShape.moveTo(-doorWidth/2+12*roofMidHeight/8,roofMidHeight);
+			roofMidTrussShape.lineTo(doorWidth/2-12*roofMidHeight/8,roofMidHeight);
+			roofMidTrussShape.lineTo(doorWidth/2-12*roofMidHeight/8-6,roofMidHeight+4);
+			roofMidTrussShape.lineTo(-doorWidth/2+12*roofMidHeight/8+6,roofMidHeight+4);
+			roofMidTrussShape.closePath();
+
+			roofMidTrussModel.push(roofMidTrussShape);
+		}
+
+		return {
+			baseRailModel,
+			roofTrussModel,
+			roofTrussGap,
+			roofMidTrussModel
+		};
 	},[width,height,length])
+
+	const frontBaseRail=useMemo(() => {
+		const startX=-doorWidth/2+railWidth+1;
+		const usableWidth=doorWidth-2-railWidth*2;
+		const railCount=Math.floor(usableWidth/dstRailL);
+		const spacing=(usableWidth-railWidth*railCount)/(railCount-1);
+
+		const baseRailModel=[];
+		for(let col=0;col<railCount;col++) {
+			const x=startX+col*(railWidth+spacing)
+
+			const frontBaseModel=new THREE.Shape();
+			frontBaseModel.moveTo(x,-doorLength/2+1.5);
+			frontBaseModel.lineTo(x+railWidth,-doorLength/2+1.5);
+			frontBaseModel.lineTo(x+railWidth,-doorLength/2+1.5+3);
+			frontBaseModel.lineTo(x,-doorLength/2+1.5+3);
+			frontBaseModel.closePath();
+
+			baseRailModel.push(frontBaseModel);
+		}
+
+		return {
+			baseRailModel,
+		}
+	},[width,height,length])
+
+	const roofBaseRail=useMemo(() => {
+		const usableWidth=doorWidth-2-railWidth*2;
+		const railCount=Math.floor(usableWidth/dstRailL);
+		const spacing=(usableWidth-railWidth*railCount)/(railCount-1);
+		const startX=Math.floor(doorWidth/2-railWidth-1);
+		const roofBaseRailModel=[];
+
+		[-1,1].forEach(dir => {
+			for(let col=0;col<railCount/2;col++) {
+				const x=startX-col*(railWidth+spacing)
+
+				const roofBaseRailShape=new THREE.Shape();
+				roofBaseRailShape.moveTo(dir*x,0);
+				roofBaseRailShape.lineTo(dir*(x-railWidth),0);
+				roofBaseRailShape.lineTo(dir*(x-railWidth),railWidth+col*(spacing+railWidth+1)*pitchRatio);
+				roofBaseRailShape.lineTo(dir*x,col*(spacing+railWidth+2)*pitchRatio);
+				roofBaseRailShape.closePath();
+
+				roofBaseRailModel.push(roofBaseRailShape);
+			}
+		})
+		return {roofBaseRailModel}
+	},[width,height,length])
+
+	const BackBaseRail=() => {
+		const startX=-doorWidth/2+railWidth+1;
+		const usableWidth=doorWidth-2-railWidth*2;
+		const railCount=Math.floor(usableWidth/dstRailL);
+		const spacing=(usableWidth-railWidth*railCount)/(railCount-1);
+
+		const baseRailModel=[];
+		for(let col=0;col<railCount;col++) {
+			const x=startX+col*(railWidth+spacing)
+
+			const backBaseModel=new THREE.Shape();
+			backBaseModel.moveTo(x,doorLength/2-1.5);
+			backBaseModel.lineTo(x+railWidth,doorLength/2-1.5);
+			backBaseModel.lineTo(x+railWidth,doorLength/2-1.5-3);
+			backBaseModel.lineTo(x,doorLength/2-1.5-3);
+			backBaseModel.closePath();
+
+			baseRailModel.push(backBaseModel);
+		}
+
+		return baseRailModel
+	}
 
 	return (
 		<>
 			<group name='base'>
-				<mesh geometry={baseModel.resultGeometry}>
+				<mesh name='bottom_base' rotation={[Math.PI/2,0,0]}>
+					<extrudeGeometry args={[baseModel,extrudeSetting(5)]} />
 					<meshLambertMaterial color={'gray'} />
 				</mesh>
+				<mesh name='top_base' rotation={[Math.PI/2,0,0]} position={[0,doorHeight+5,0]}>
+					<extrudeGeometry args={[baseModel,extrudeSetting(5)]} />
+					<meshLambertMaterial color={'gray'} />
+				</mesh>
+			</group>
+
+			<group name='baseRail' >
+				<mesh rotation={[-Math.PI/2,0,0]}>
+					<extrudeGeometry args={[baseSideRail.baseRailModel,extrudeSetting(doorHeight)]} />
+					<meshLambertMaterial color={'#737373'} />
+				</mesh>
+				<mesh rotation={[-Math.PI/2,0,0]}>
+					<extrudeGeometry args={[frontBaseRail.baseRailModel,extrudeSetting(doorHeight)]} />
+					<meshLambertMaterial color={'#737373'} />
+				</mesh>
+				<mesh position={[0,doorHeight+5,doorLength/2-4.5]}>
+					<extrudeGeometry args={[roofBaseRail.roofBaseRailModel,extrudeSetting(3)]} />
+					<meshLambertMaterial color={'#737373'} />
+				</mesh>
+				<mesh rotation={[-Math.PI/2,0,0]}>
+					<extrudeGeometry args={[BackBaseRail(),extrudeSetting(doorHeight)]} />
+					<meshLambertMaterial color={'#737373'} />
+				</mesh>
+			</group>
+
+			<group name='roofTruss'>
+				{
+					baseSideRail.roofTrussGap.map((item,index) => (
+						<>
+							<mesh key={index} position={[0,doorHeight+5,(doorLength/2-railThickness-railThickness/2-index*item)]}>
+								<extrudeGeometry args={[baseSideRail.roofTrussModel,extrudeSetting(3)]} />
+								<meshLambertMaterial color={'#737373'} />
+							</mesh>
+							<mesh key={index} position={[0,doorHeight+5,(doorLength/2-railThickness-railThickness/2-index*item)]}>
+								<extrudeGeometry args={[baseSideRail.roofMidTrussModel,extrudeSetting(3)]} />
+								<meshLambertMaterial color={'#737373'} />
+							</mesh>
+						</>
+					))
+				}
 			</group>
 		</>
 	)
