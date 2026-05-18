@@ -20,8 +20,8 @@ const RoostModel=() => {
 
 	const bowShape=new THREE.Shape();
 	bowShape.moveTo(roostWidth,0);
-	bowShape.lineTo(roostWidth-Math.sin(roostAngle)*roostBowThickness,0);
-	bowShape.lineTo(0,roostHeight-Math.cos(roostAngle)*roostBowThickness);
+	bowShape.lineTo(roostWidth-roostBowThickness / Math.sin(roostAngle),0);
+	bowShape.lineTo(0,roostHeight-roostBowThickness / Math.cos(roostAngle));
 	bowShape.lineTo(0,roostHeight);
 	bowShape.closePath();
 
