@@ -1,19 +1,20 @@
 import * as THREE from 'three';
-import React, { useMemo } from 'react'
-import { TextureLoader } from 'three';
-import { useLoader } from '@react-three/fiber';
+import React,{useMemo} from 'react'
+import {TextureLoader} from 'three';
+import {useLoader} from '@react-three/fiber';
 
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import legTexture from '../../../assets/imgs/leg_texture_old.jpg';
-import { extrudeSetting } from '../../../utils/Function';
+import {extrudeSetting} from '../../../utils/Function';
 
 import GableTruss from './GableTruss'
+import LoftedTruss from './LoftedTruss';
 
-const Truss = ({modelType}) => {
-	const width = useSelector((state) => state.building.buildingWidth);
-	const length = useSelector((state) => state.building.buildingLength);
-	const height = useSelector((state) => state.building.buildingHeight);
-	const pitchRise = useSelector((state) => state.building.buildingPitch);
+const Truss=({modelType}) => {
+	const width=useSelector((state) => state.building.buildingWidth);
+	const length=useSelector((state) => state.building.buildingLength);
+	const height=useSelector((state) => state.building.buildingHeight);
+	const pitchRise=useSelector((state) => state.building.buildingPitch);
 	const dstRailL=30;
 	const pitchRatio=pitchRise/12;
 	const railWidth=4;
@@ -159,79 +160,79 @@ const Truss = ({modelType}) => {
 
 		return baseRailModel
 	}
-  return (
-	<>
-		<group name='base'>
-			<mesh name='bottom_base' rotation={[Math.PI/2,0,0]}>
-				<extrudeGeometry args={[baseModel,extrudeSetting(5)]} />
-				<meshStandardMaterial
-					bumpMap={colorMap}
-					bumpScale={0.2}
-					map={colorMap}
-					color={'#8c8c8c'}
-					side={THREE.DoubleSide}
-					roughness={0.8}
-					metalness={0}
-				/>
-			</mesh>
-			<mesh name='top_base' rotation={[Math.PI/2,0,0]} position={[0,height+5,0]}>
-				<extrudeGeometry args={[baseModel,extrudeSetting(5)]} />
-				<meshStandardMaterial
-					bumpMap={colorMap}
-					bumpScale={0.2}
-					map={colorMap}
-					color={'#8c8c8c'}
-					side={THREE.DoubleSide}
-					roughness={0.8}
-					metalness={0}
-				/>
-			</mesh>
-		</group>
+	return (
+		<>
+			<group name='base'>
+				<mesh name='bottom_base' rotation={[Math.PI/2,0,0]}>
+					<extrudeGeometry args={[baseModel,extrudeSetting(5)]} />
+					<meshStandardMaterial
+						bumpMap={colorMap}
+						bumpScale={0.2}
+						map={colorMap}
+						color={'#8c8c8c'}
+						side={THREE.DoubleSide}
+						roughness={0.8}
+						metalness={0}
+					/>
+				</mesh>
+				<mesh name='top_base' rotation={[Math.PI/2,0,0]} position={[0,height+5,0]}>
+					<extrudeGeometry args={[baseModel,extrudeSetting(5)]} />
+					<meshStandardMaterial
+						bumpMap={colorMap}
+						bumpScale={0.2}
+						map={colorMap}
+						color={'#8c8c8c'}
+						side={THREE.DoubleSide}
+						roughness={0.8}
+						metalness={0}
+					/>
+				</mesh>
+			</group>
 
-		<group name='baseRail' >
-			<mesh rotation={[-Math.PI/2,0,0]}>
-				<extrudeGeometry args={[baseSideRail.baseRailModel,extrudeSetting(height)]} />
-				<meshStandardMaterial
-					bumpMap={colorMap}
-					bumpScale={0.2}
-					map={colorMap}
-					color={'#8c8c8c'}
-					side={THREE.DoubleSide}
-					roughness={0.8}
-					metalness={0}
-				/>
-			</mesh>
-			<mesh rotation={[-Math.PI/2,0,0]}>
-				<extrudeGeometry args={[frontBaseRail.baseRailModel,extrudeSetting(height)]} />
-				<meshStandardMaterial
-					bumpMap={colorMap}
-					bumpScale={0.2}
-					map={colorMap}
-					color={'#8c8c8c'}
-					side={THREE.DoubleSide}
-					roughness={0.8}
-					metalness={0}
-				/>
-			</mesh>
-			<mesh rotation={[-Math.PI/2,0,0]}>
-				<extrudeGeometry args={[BackBaseRail(),extrudeSetting(height)]} />
-				<meshStandardMaterial
-					bumpMap={colorMap}
-					bumpScale={0.2}
-					map={colorMap}
-					color={'#8c8c8c'}
-					side={THREE.DoubleSide}
-					roughness={0.8}
-					metalness={0}
-				/>
-			</mesh>
-		</group>
+			<group name='baseRail' >
+				<mesh rotation={[-Math.PI/2,0,0]}>
+					<extrudeGeometry args={[baseSideRail.baseRailModel,extrudeSetting(height)]} />
+					<meshStandardMaterial
+						bumpMap={colorMap}
+						bumpScale={0.2}
+						map={colorMap}
+						color={'#8c8c8c'}
+						side={THREE.DoubleSide}
+						roughness={0.8}
+						metalness={0}
+					/>
+				</mesh>
+				<mesh rotation={[-Math.PI/2,0,0]}>
+					<extrudeGeometry args={[frontBaseRail.baseRailModel,extrudeSetting(height)]} />
+					<meshStandardMaterial
+						bumpMap={colorMap}
+						bumpScale={0.2}
+						map={colorMap}
+						color={'#8c8c8c'}
+						side={THREE.DoubleSide}
+						roughness={0.8}
+						metalness={0}
+					/>
+				</mesh>
+				<mesh rotation={[-Math.PI/2,0,0]}>
+					<extrudeGeometry args={[BackBaseRail(),extrudeSetting(height)]} />
+					<meshStandardMaterial
+						bumpMap={colorMap}
+						bumpScale={0.2}
+						map={colorMap}
+						color={'#8c8c8c'}
+						side={THREE.DoubleSide}
+						roughness={0.8}
+						metalness={0}
+					/>
+				</mesh>
+			</group>
 
 
-		{modelType === 'gable_building' && <GableTruss />}
-		{/* {modelType === 'lofted_building' && <LoftedTruss />} */}
-	</>
-  )
+			{modelType==='gable_building'&&<GableTruss />}
+			{modelType==='lofted_building'&&< LoftedTruss />}
+		</>
+	)
 }
 
 export default Truss

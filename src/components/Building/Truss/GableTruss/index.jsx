@@ -3,22 +3,22 @@ import {TextureLoader} from 'three'
 import React,{useMemo} from 'react'
 import {useLoader} from '@react-three/fiber';
 
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import {extrudeSetting} from '../../../../utils/Function';
 import legTexture from '../../../../assets/imgs/leg_texture_old.jpg';
 
 const GableTruss=() => {
-	const width = useSelector((state) => state.building.buildingWidth);
-	const length = useSelector((state) => state.building.buildingLength);
-	const height = useSelector((state) => state.building.buildingHeight);
-	const pitchRise = useSelector((state) => state.building.buildingPitch);
+	const width=useSelector((state) => state.building.buildingWidth);
+	const length=useSelector((state) => state.building.buildingLength);
+	const height=useSelector((state) => state.building.buildingHeight);
+	const pitchRise=useSelector((state) => state.building.buildingPitch);
 	const dstRailL=30;
 	const pitchRatio=pitchRise/12;
 	const railWidth=4;
 	const railThickness=3;
 
-	const roofHeight=width/2*pitchRatio;
-	const roofMidHeight=width/2*5/12;
+	const roofHeight=(width/2-railWidth-1)*pitchRatio;
+	const roofMidHeight=width/2*pitchRatio/2;
 
 	const colorMap=useLoader(TextureLoader,legTexture);
 	colorMap.wrapS=THREE.RepeatWrapping;
@@ -41,15 +41,15 @@ const GableTruss=() => {
 				const roofBaseRailShape=new THREE.Shape();
 				roofBaseRailShape.moveTo(dir*x,0);
 				roofBaseRailShape.lineTo(dir*(x-railWidth),0);
-				roofBaseRailShape.lineTo(dir*(x-railWidth),railWidth+col*(spacing+railWidth+1)*pitchRatio);
-				roofBaseRailShape.lineTo(dir*x,col*(spacing+railWidth+2)*pitchRatio);
+				roofBaseRailShape.lineTo(dir*(x-railWidth),railWidth*pitchRatio+col*(spacing+railWidth)*pitchRatio);
+				roofBaseRailShape.lineTo(dir*x,col*(spacing+railWidth)*pitchRatio);
 				roofBaseRailShape.closePath();
 
 				roofBaseRailModel.push(roofBaseRailShape);
 			}
 		})
 		return {roofBaseRailModel}
-	},[width,height,length])
+	},[width,height,length,pitchRatio])
 
 	const baseSideRail=useMemo(() => {
 		const baseRailModel=[];
@@ -97,10 +97,10 @@ const GableTruss=() => {
 			roofTrussGap.push(z);
 
 			const roofMidTrussShape=new THREE.Shape();
-			roofMidTrussShape.moveTo(-width/2+12*roofMidHeight/8,roofMidHeight);
-			roofMidTrussShape.lineTo(width/2-12*roofMidHeight/8,roofMidHeight);
-			roofMidTrussShape.lineTo(width/2-12*roofMidHeight/8-6,roofMidHeight+4);
-			roofMidTrussShape.lineTo(-width/2+12*roofMidHeight/8+6,roofMidHeight+4);
+			roofMidTrussShape.moveTo(-width/2+roofMidHeight/pitchRatio,roofMidHeight);
+			roofMidTrussShape.lineTo(width/2-roofMidHeight/pitchRatio,roofMidHeight);
+			roofMidTrussShape.lineTo(width/2-roofMidHeight/pitchRatio-railWidth/pitchRatio,roofMidHeight+4);
+			roofMidTrussShape.lineTo(-width/2+roofMidHeight/pitchRatio+railWidth/pitchRatio,roofMidHeight+4);
 			roofMidTrussShape.closePath();
 
 			roofMidTrussModel.push(roofMidTrussShape);
@@ -112,22 +112,22 @@ const GableTruss=() => {
 			roofTrussGap,
 			roofMidTrussModel
 		};
-	},[width,height,length])
+	},[width,height,length,pitchRise])
 
 	return (
 		<>
-            <mesh position={[0,height+5,length/2-4.5]}>
-                <extrudeGeometry args={[roofBaseRail.roofBaseRailModel,extrudeSetting(3)]} />
-                <meshStandardMaterial
-                    bumpMap={colorMap}
-                    bumpScale={0.2}
-                    map={colorMap}
-                    color={'#8c8c8c'}
-                    side={THREE.DoubleSide}
-                    roughness={0.8}
-                    metalness={0}
-                />
-            </mesh>
+			<mesh position={[0,height+5,length/2-4.5]}>
+				<extrudeGeometry args={[roofBaseRail.roofBaseRailModel,extrudeSetting(3)]} />
+				<meshStandardMaterial
+					bumpMap={colorMap}
+					bumpScale={0.2}
+					map={colorMap}
+					color={'#8c8c8c'}
+					side={THREE.DoubleSide}
+					roughness={0.8}
+					metalness={0}
+				/>
+			</mesh>
 			<group name='roofTruss'>
 				{
 					baseSideRail.roofTrussGap.map((item,index) => (
