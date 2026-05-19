@@ -22,12 +22,13 @@ const GableRoof=() => {
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
 
 	const pitchRatio=pitchRise/12;
-	const railWidth=4;
+	const railThk=4;
 	const wallWidth=width+4;
-	const roofHeight=(width/2-railWidth-1)*pitchRatio+railWidth+1;
 	const wallHeight=height+5;
 	const roofOverhangL=20;
 	const roofAngle=Math.atan(pitchRatio);
+	const railWidth=railThk/Math.sin(Math.PI/2-roofAngle);
+	const roofHeight=(width/2-railWidth-1)*pitchRatio+railWidth+1;
 	const roofOverhangX=Math.cos(roofAngle)*roofOverhangL;
 	const roofOverhangY=Math.sin(roofAngle)*roofOverhangL;
 
