@@ -22,14 +22,14 @@ const OutsideWall=({modelType}) => {
 	const width=useSelector((state) => state.building.buildingWidth);
 
 	const wallSideShape=new THREE.Shape();
-	wallSideShape.moveTo(-length/2,-5);
-	wallSideShape.lineTo(-length/2,height+5);
-	wallSideShape.lineTo(length/2,height+5);
-	wallSideShape.lineTo(length/2,-5);
+	wallSideShape.moveTo(-length/2-3,-5);
+	wallSideShape.lineTo(-length/2-3,height+5);
+	wallSideShape.lineTo(length/2+3,height+5);
+	wallSideShape.lineTo(length/2+3,-5);
 	wallSideShape.closePath();
 	return (
 		<>
-			<mesh name='left wall' rotation={[0,Math.PI/2,0]} position={[-width/2-2,0,0]} >
+			<mesh name='left wall' rotation={[0,Math.PI/2,0]} position={[-width/2-4,0,0]} >
 				<extrudeGeometry args={[wallSideShape,extrudeSetting(2)]} />
 				<meshLambertMaterial
 					bumpMap={colorMap}
@@ -41,7 +41,7 @@ const OutsideWall=({modelType}) => {
 					metalness={0}
 				/>
 			</mesh>
-			<mesh name='right wall' rotation={[0,Math.PI/2,0]} position={[width/2,0,0]} >
+			<mesh name='right wall' rotation={[0,Math.PI/2,0]} position={[width/2+2,0,0]} >
 				<extrudeGeometry args={[wallSideShape,extrudeSetting(2)]} />
 				<meshLambertMaterial
 					bumpMap={colorMap}

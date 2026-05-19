@@ -39,10 +39,10 @@ const Truss=({modelType}) => {
 		baseShape.closePath();
 
 		const baseCutShape=new THREE.Path();
-		baseCutShape.moveTo(-width/2+5,-length/2+5);
-		baseCutShape.lineTo(-width/2+5,length/2-5);
-		baseCutShape.lineTo(width/2-5,length/2-5);
-		baseCutShape.lineTo(width/2-5,-length/2+5);
+		baseCutShape.moveTo(-width/2+7,-length/2+7);
+		baseCutShape.lineTo(-width/2+7,length/2-7);
+		baseCutShape.lineTo(width/2-7,length/2-7);
+		baseCutShape.lineTo(width/2-7,-length/2+7);
 		baseCutShape.closePath();
 
 		baseShape.holes.push(baseCutShape);

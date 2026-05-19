@@ -19,16 +19,18 @@ const GableRoof=() => {
 	const height=useSelector((state) => state.building.buildingHeight);
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
 	const pitchRatio=pitchRise/12;
-	const railWidth=4;
+	const railThk=4;
+	const roofAngle=Math.atan(pitchRatio);
+	const railHeight=railThk/Math.cos(roofAngle);
 
-	const roofHeight=(width/2-railWidth-1)*pitchRatio;
+	const roofHeight=(width/2-railHeight-1)*pitchRatio;
 
 	const roofShape=new THREE.Shape()
 	roofShape.moveTo(-width/2+1,0);
-	roofShape.lineTo(0,roofHeight+railWidth);
+	roofShape.lineTo(0,roofHeight+railHeight);
 	roofShape.lineTo(width/2-1,0);
 	roofShape.lineTo(width/2,0);
-	roofShape.lineTo(0,roofHeight+railWidth+1);
+	roofShape.lineTo(0,roofHeight+railHeight+1);
 	roofShape.lineTo(-width/2,0);
 	roofShape.closePath();
 

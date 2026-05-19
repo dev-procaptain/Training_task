@@ -20,9 +20,12 @@ const GableWall=() => {
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
 
 	const pitchRatio=pitchRise/12;
-	const railWidth=4;
-	const roofHeight=(width/2-railWidth-1)*pitchRatio;
-	const wallHeight=height+6+roofHeight+railWidth;
+	const railThk=4;
+	const roofAngle=Math.atan(pitchRatio);
+	const railHeight=railThk/Math.cos(roofAngle);
+
+	const roofHeight=(width/2-railHeight-1)*pitchRatio;
+	const wallHeight=height+6+roofHeight+railHeight;
 
 	const wallFrontShape=new THREE.Shape();
 	wallFrontShape.moveTo(-width/2-2,-5);
@@ -35,7 +38,7 @@ const GableWall=() => {
 	return (
 		<>
 			<group >
-				<mesh name='front wall' position={[0,0,length/2]}>
+				<mesh name='front wall' position={[0,0,length/2+1]}>
 					<extrudeGeometry args={[wallFrontShape,extrudeSetting(2)]} />
 					<meshLambertMaterial
 						bumpMap={colorMap}
@@ -47,7 +50,7 @@ const GableWall=() => {
 						metalness={0}
 					/>
 				</mesh>
-				<mesh name='back wall' position={[0,0,-length/2-2]}>
+				<mesh name='back wall' position={[0,0,-length/2-3]}>
 					<extrudeGeometry args={[wallFrontShape,extrudeSetting(2)]} />
 					<meshLambertMaterial
 						bumpMap={colorMap}

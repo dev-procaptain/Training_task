@@ -22,41 +22,43 @@ const GableRoof=() => {
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
 
 	const pitchRatio=pitchRise/12;
-	const railThk=4;
-	const wallWidth=width+4;
+	const wallWidth=width+6;
 	const wallHeight=height+5;
 	const roofOverhangL=20;
+	const railThk=4;
 	const roofAngle=Math.atan(pitchRatio);
 	const railWidth=railThk/Math.sin(Math.PI/2-roofAngle);
-	const roofHeight=(width/2-railWidth-1)*pitchRatio+railWidth+1;
 	const roofOverhangX=Math.cos(roofAngle)*roofOverhangL;
 	const roofOverhangY=Math.sin(roofAngle)*roofOverhangL;
+	const railHeight=railThk/Math.cos(roofAngle);
+	const roofHeight=(width/2-railHeight-1)*pitchRatio;
+
 
 	const roofBottomShape=new THREE.Shape();
-	roofBottomShape.moveTo(-wallWidth/2-roofOverhangX,wallHeight-roofOverhangY);
-	roofBottomShape.lineTo(-wallWidth/2-roofOverhangX,wallHeight-roofOverhangY+railWidth*2);
-	roofBottomShape.lineTo(0,wallHeight+roofHeight+railWidth*2);
-	roofBottomShape.lineTo(wallWidth/2+roofOverhangX,wallHeight-roofOverhangY+railWidth*2);
-	roofBottomShape.lineTo(wallWidth/2+roofOverhangX,wallHeight-roofOverhangY);
-	roofBottomShape.lineTo(0,wallHeight+roofHeight);
+	roofBottomShape.moveTo(-width/2-roofOverhangX,-roofOverhangY);
+	roofBottomShape.lineTo(0,roofHeight+railHeight+1);
+	roofBottomShape.lineTo(width/2+roofOverhangX,-roofOverhangY);
+	roofBottomShape.lineTo(width/2+roofOverhangX,-roofOverhangY+railWidth*2);
+	roofBottomShape.lineTo(0,roofHeight+railHeight+1+railWidth*2);
+	roofBottomShape.lineTo(-width/2-roofOverhangX,-roofOverhangY+railWidth*2);
 	roofBottomShape.closePath();
 
 	const roofTopShape=new THREE.Shape();
-	roofTopShape.moveTo(-wallWidth/2-roofOverhangX,wallHeight-roofOverhangY);
-	roofTopShape.lineTo(-wallWidth/2-roofOverhangX,wallHeight-roofOverhangY+0.5);
-	roofTopShape.lineTo(0,wallHeight+roofHeight+0.5);
-	roofTopShape.lineTo(wallWidth/2+roofOverhangX,wallHeight-roofOverhangY+0.5);
-	roofTopShape.lineTo(wallWidth/2+roofOverhangX,wallHeight-roofOverhangY);
-	roofTopShape.lineTo(0,wallHeight+roofHeight);
+	roofTopShape.moveTo(-width/2-roofOverhangX,-roofOverhangY);
+	roofTopShape.lineTo(0,roofHeight+railHeight+1);
+	roofTopShape.lineTo(width/2+roofOverhangX,-roofOverhangY);
+	roofTopShape.lineTo(width/2+roofOverhangX,-roofOverhangY+1);
+	roofTopShape.lineTo(0,roofHeight+railHeight+1+1);
+	roofTopShape.lineTo(-width/2-roofOverhangX,-roofOverhangY+1);
 	roofTopShape.closePath();
 
 	const frontOutTrimShape=new THREE.Shape();
-	frontOutTrimShape.moveTo(-wallWidth/2-roofOverhangX,wallHeight-roofOverhangY);
-	frontOutTrimShape.lineTo(-wallWidth/2-roofOverhangX,wallHeight-roofOverhangY+railWidth*2);
-	frontOutTrimShape.lineTo(0,wallHeight+roofHeight+railWidth*2);
-	frontOutTrimShape.lineTo(wallWidth/2+roofOverhangX,wallHeight-roofOverhangY+railWidth*2);
-	frontOutTrimShape.lineTo(wallWidth/2+roofOverhangX,wallHeight-roofOverhangY);
-	frontOutTrimShape.lineTo(0,wallHeight+roofHeight);
+	frontOutTrimShape.moveTo(-width/2-roofOverhangX,-roofOverhangY);
+	frontOutTrimShape.lineTo(0,roofHeight+railHeight+1);
+	frontOutTrimShape.lineTo(width/2+roofOverhangX,-roofOverhangY);
+	frontOutTrimShape.lineTo(width/2+roofOverhangX,-roofOverhangY+railWidth*2+1.5);
+	frontOutTrimShape.lineTo(0,roofHeight+railHeight+1+railWidth*2+1.5);
+	frontOutTrimShape.lineTo(-width/2-roofOverhangX,-roofOverhangY+railWidth*2+1.5);
 	frontOutTrimShape.closePath();
 
 
@@ -93,11 +95,11 @@ const GableRoof=() => {
 	return (
 		<>
 			<group name='roof'>
-				<mesh position={[0,0,-length/2-10]}>
+				<mesh position={[0,height+6,-length/2-10]}>
 					<extrudeGeometry args={[roofBottomShape,extrudeSetting(length+20)]} />
 					<meshLambertMaterial color={'#8c8c8c'} />
 				</mesh>
-				<mesh position={[0,railWidth*2+0.1,-length/2-10]}>
+				<mesh position={[0,height+6.5+railWidth*2,-length/2-10]}>
 					<extrudeGeometry args={[roofTopShape,extrudeSetting(length+20)]} />
 					<meshLambertMaterial
 						bumpMap={colorMap}
@@ -112,21 +114,21 @@ const GableRoof=() => {
 
 			</group>
 
-			{/*<group name='trim'  >
-				<mesh name='frontOutTrim' position={[0,-railWidth,-length/2-12]}>
+			<group name='trim'  >
+				<mesh name='frontOutTrim' position={[0,height+6,-length/2-12]}>
 					<extrudeGeometry args={[frontOutTrimShape,extrudeSetting(2)]} />
 					<meshLambertMaterial color={'#8c8c8c'} />
 				</mesh>
-
+				<mesh name='backOutTrim' position={[0,height+6,length/2+10]}>
+					<extrudeGeometry args={[frontOutTrimShape,extrudeSetting(2)]} />
+					<meshLambertMaterial color={'#8c8c8c'} />
+				</mesh>
+				{/*
 				<mesh name='frontInnerTrim' position={[0,-railWidth,-length/2-10]}>
 					<extrudeGeometry args={[frontInnerTrimShape,extrudeSetting(8)]} />
 					<meshLambertMaterial color={'#8c8c8c'} />
 				</mesh>
 
-				<mesh name='backOutTrim' position={[0,-railWidth,length/2+10]}>
-					<extrudeGeometry args={[frontOutTrimShape,extrudeSetting(2)]} />
-					<meshLambertMaterial color={'#8c8c8c'} />
-				</mesh>
 				<mesh name='backInnerTrim' position={[0,-railWidth,length/2+2]}>
 					<extrudeGeometry args={[frontInnerTrimShape,extrudeSetting(8)]} />
 					<meshLambertMaterial color={'#8c8c8c'} />
@@ -142,8 +144,8 @@ const GableRoof=() => {
 				<mesh name='rightOutTrim' position={[0,-railWidth,-length/2-12]}>
 					<extrudeGeometry args={[rightSideOutTrimShape,extrudeSetting(length+24)]} />
 					<meshLambertMaterial color={'#8c8c8c'} />
-				</mesh>
-			</group>*/}
+				</mesh>*/}
+			</group>
 		</>
 	)
 }

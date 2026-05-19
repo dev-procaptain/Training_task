@@ -12,7 +12,7 @@ const CanvasEnv=() => {
         enableDamping
         dampingFactor={0.05}
         minDistance={30}
-        maxDistance={5000}
+        maxDistance={800}
       />
       {/*<Environment preset="city" background backgroundBlurriness={1} backgroundIntensity={2} />*/}
       <axesHelper args={[500,500,500]} />

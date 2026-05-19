@@ -14,10 +14,13 @@ const GableTruss=() => {
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
 	const dstRailL=30;
 	const pitchRatio=pitchRise/12;
-	const railWidth=4;
+	const railThk=4;
+	const roofAngle=Math.atan(pitchRatio);
+	const railWidth=railThk/Math.sin(roofAngle);
+	const railHeight=railThk/Math.cos(roofAngle);
 	const railThickness=3;
 
-	const roofHeight=(width/2-railWidth-1)*pitchRatio;
+	const roofHeight=(width/2-railHeight-1)*pitchRatio;
 	const roofMidHeight=width/2*pitchRatio/2;
 
 	const colorMap=useLoader(TextureLoader,legTexture);
@@ -28,21 +31,21 @@ const GableTruss=() => {
 	colorMap.flipY=false;
 
 	const roofBaseRail=useMemo(() => {
-		const usableWidth=width-2-railWidth*2;
+		const usableWidth=width-2-railThk*2;
 		const railCount=Math.floor(usableWidth/dstRailL);
-		const spacing=(usableWidth-railWidth*railCount)/(railCount-1);
-		const startX=Math.floor(width/2-railWidth-1);
+		const spacing=(usableWidth-railThk*railCount)/(railCount-1);
+		const startX=Math.floor(width/2-railThk-1);
 		const roofBaseRailModel=[];
 
 		[-1,1].forEach(dir => {
 			for(let col=0;col<railCount/2;col++) {
-				const x=startX-col*(railWidth+spacing)
+				const x=startX-col*(railThk+spacing)
 
 				const roofBaseRailShape=new THREE.Shape();
 				roofBaseRailShape.moveTo(dir*x,0);
-				roofBaseRailShape.lineTo(dir*(x-railWidth),0);
-				roofBaseRailShape.lineTo(dir*(x-railWidth),railWidth*pitchRatio+col*(spacing+railWidth)*pitchRatio);
-				roofBaseRailShape.lineTo(dir*x,col*(spacing+railWidth)*pitchRatio);
+				roofBaseRailShape.lineTo(dir*(x-railThk),0);
+				roofBaseRailShape.lineTo(dir*(x-railThk),railThk*pitchRatio+col*(spacing+railThk)*pitchRatio);
+				roofBaseRailShape.lineTo(dir*x,col*(spacing+railThk)*pitchRatio);
 				roofBaseRailShape.closePath();
 
 				roofBaseRailModel.push(roofBaseRailShape);
@@ -87,9 +90,9 @@ const GableTruss=() => {
 			[-1,1].forEach(dir => {
 				const roofTrussshape=new THREE.Shape();
 				roofTrussshape.moveTo(dir*(width/2-1),0);
-				roofTrussshape.lineTo(dir*(width/2-5),0);
+				roofTrussshape.lineTo(dir*(width/2-railWidth),0);
 				roofTrussshape.lineTo(0,roofHeight);
-				roofTrussshape.lineTo(0,roofHeight+4);
+				roofTrussshape.lineTo(0,roofHeight+railHeight);
 				roofTrussshape.closePath();
 
 				roofTrussModel.push(roofTrussshape);
@@ -99,8 +102,8 @@ const GableTruss=() => {
 			const roofMidTrussShape=new THREE.Shape();
 			roofMidTrussShape.moveTo(-width/2+roofMidHeight/pitchRatio,roofMidHeight);
 			roofMidTrussShape.lineTo(width/2-roofMidHeight/pitchRatio,roofMidHeight);
-			roofMidTrussShape.lineTo(width/2-roofMidHeight/pitchRatio-railWidth/pitchRatio,roofMidHeight+4);
-			roofMidTrussShape.lineTo(-width/2+roofMidHeight/pitchRatio+railWidth/pitchRatio,roofMidHeight+4);
+			roofMidTrussShape.lineTo(width/2-roofMidHeight/pitchRatio-railThk/pitchRatio,roofMidHeight+4);
+			roofMidTrussShape.lineTo(-width/2+roofMidHeight/pitchRatio+railThk/pitchRatio,roofMidHeight+4);
 			roofMidTrussShape.closePath();
 
 			roofMidTrussModel.push(roofMidTrussShape);
