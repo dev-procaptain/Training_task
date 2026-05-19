@@ -10,10 +10,10 @@ export default function Building() {
 
   return (
     <group>
-      {/*<Truss modelType={modelType} />
-      <WallModel modelType={modelType} />
-      <Roof modelType={modelType} />*/}
-      <RoostModel />
+      <Truss modelType={modelType} />
+      {/*<WallModel modelType={modelType} />*/}
+      {/*<Roof modelType={modelType} />*/}
+      {/*<RoostModel />*/}
     </group>
   );
 }

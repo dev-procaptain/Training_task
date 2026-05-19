@@ -32,13 +32,6 @@ const GableWall=() => {
 	wallFrontShape.lineTo(width/2+2,-5);
 	wallFrontShape.closePath();
 
-	const wallSideShape=new THREE.Shape();
-	wallSideShape.moveTo(-length/2,-5);
-	wallSideShape.lineTo(-length/2,height+5);
-	wallSideShape.lineTo(length/2,height+5);
-	wallSideShape.lineTo(length/2,-5);
-	wallSideShape.closePath();
-
 	return (
 		<>
 			<group >
@@ -56,30 +49,6 @@ const GableWall=() => {
 				</mesh>
 				<mesh name='back wall' position={[0,0,-length/2-2]}>
 					<extrudeGeometry args={[wallFrontShape,extrudeSetting(2)]} />
-					<meshLambertMaterial
-						bumpMap={colorMap}
-						bumpScale={0.2}
-						map={colorMap}
-						color={'#8c8c8c'}
-						side={THREE.DoubleSide}
-						roughness={0.8}
-						metalness={0}
-					/>
-				</mesh>
-				<mesh name='left wall' rotation={[0,Math.PI/2,0]} position={[-width/2-2,0,0]} >
-					<extrudeGeometry args={[wallSideShape,extrudeSetting(2)]} />
-					<meshLambertMaterial
-						bumpMap={colorMap}
-						bumpScale={0.2}
-						map={colorMap}
-						color={'#8c8c8c'}
-						side={THREE.DoubleSide}
-						roughness={0.8}
-						metalness={0}
-					/>
-				</mesh>
-				<mesh name='right wall' rotation={[0,Math.PI/2,0]} position={[width/2,0,0]} >
-					<extrudeGeometry args={[wallSideShape,extrudeSetting(2)]} />
 					<meshLambertMaterial
 						bumpMap={colorMap}
 						bumpScale={0.2}

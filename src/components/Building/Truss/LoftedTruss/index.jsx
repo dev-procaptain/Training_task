@@ -8,6 +8,12 @@ import {extrudeSetting} from '../../../../utils/Function';
 import legTexture from '../../../../assets/imgs/leg_texture_old.jpg';
 
 const LoftedTruss=() => {
+  const colorMap=useLoader(TextureLoader,legTexture);
+  colorMap.wrapS=THREE.RepeatWrapping;
+  colorMap.wrapT=THREE.RepeatWrapping;
+  colorMap.colorSpace=THREE.SRGBColorSpace;
+  colorMap.repeat.set(0.02,0.01);
+  colorMap.flipY=false;
 
   const width=useSelector((state) => state.building.buildingWidth);
   const length=useSelector((state) => state.building.buildingLength);
@@ -24,50 +30,21 @@ const LoftedTruss=() => {
   const roofWidthone=roofBottomHeight/roofBottomPitchRatio;
   const usableLength=length-3;
   const railCount=Math.floor(usableLength/dstRailL);
-
-  const spacing=
-    (usableLength-railThickness*railCount)/
-    (railCount-1);
-
-  const colorMap=useLoader(TextureLoader,legTexture);
-
-  colorMap.wrapS=THREE.RepeatWrapping;
-  colorMap.wrapT=THREE.RepeatWrapping;
-  colorMap.colorSpace=THREE.SRGBColorSpace;
-  colorMap.repeat.set(0.02,0.01);
-  colorMap.flipY=false;
+  const spacing=(usableLength-railThickness*railCount)/(railCount-1);
 
   const roofBaseRail=useMemo(() => {
-
     const roofBaseRailModel=[];
-
     [-1,1].forEach((dir) => {
 
       for(let col=0;col<Math.floor(railCount);col++) {
 
         const roofBaseShape=new THREE.Shape();
-
         roofBaseShape.moveTo(dir*(roofWidth/2),0);
-
-        roofBaseShape.lineTo(
-          dir*(roofWidth/2-roofWidthone),
-          roofBottomHeight
-        );
-
+        roofBaseShape.lineTo(dir*(roofWidth/2-roofWidthone),roofBottomHeight);
         roofBaseShape.lineTo(0,roofHeight);
-
         roofBaseShape.lineTo(0,roofHeight+railWidth);
-
-        roofBaseShape.lineTo(
-          dir*(roofWidth/2-roofWidthone),
-          roofBottomHeight+railWidth
-        );
-
-        roofBaseShape.lineTo(
-          dir*(roofWidth/2+railWidth),
-          0
-        );
-
+        roofBaseShape.lineTo(dir*(roofWidth/2-roofWidthone),roofBottomHeight+railWidth);
+        roofBaseShape.lineTo(dir*(roofWidth/2+railWidth),0);
         roofBaseShape.closePath();
 
         roofBaseRailModel.push({
@@ -76,7 +53,6 @@ const LoftedTruss=() => {
         });
       }
     });
-
     return roofBaseRailModel;
 
   },[width,height,pitchRise,railCount]);
@@ -99,13 +75,7 @@ const LoftedTruss=() => {
             ]}
           >
 
-            <extrudeGeometry
-              args={[
-                item.shape,
-                extrudeSetting(3)
-              ]}
-            />
-
+            <extrudeGeometry args={[item.shape,extrudeSetting(3)]} />
             <meshStandardMaterial
               bumpMap={colorMap}
               bumpScale={0.2}
@@ -115,7 +85,6 @@ const LoftedTruss=() => {
               roughness={0.8}
               metalness={0}
             />
-
           </mesh>
         ))
       }
