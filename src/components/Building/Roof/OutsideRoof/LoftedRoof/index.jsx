@@ -66,17 +66,17 @@ const LoftedRoof=() => {
 	roofTopShape.lineTo(-outerRoofWidth,outerRoofHeight);
 	roofTopShape.lineTo(0,roofHeight+trimRailHeight+roofRailHeight);
 	roofTopShape.lineTo(outerRoofWidth,outerRoofHeight);
-	roofTopShape.lineTo(width/2+roofOverhangX+trimRailWidth+roofRailHeight,0-roofOverhangY);
+	roofTopShape.lineTo(width/2+roofOverhangX+trimRailWidth+roofRailWidth,0-roofOverhangY);
 	roofTopShape.closePath();
 
 	return (
 		<>
 			<group>
-				<mesh name='roof_Trim' position={[0,height+5,-length/2-10]}>
+				<mesh name='roof_Trim' position={[0,height+6,-length/2-10]}>
 					<extrudeGeometry args={[roofBottomShape,extrudeSetting(length+20)]} />
 					<meshLambertMaterial color={'#8c8c8c'} />
 				</mesh>
-				<mesh name='roof' position={[0,height+5,-length/2-10]}>
+				<mesh name='roof' position={[0,height+6,-length/2-10]}>
 					<extrudeGeometry args={[roofTopShape,extrudeSetting(length+20)]} />
 					<meshLambertMaterial
 						bumpMap={colorMap}
