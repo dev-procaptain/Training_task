@@ -228,7 +228,6 @@ const Truss=({modelType}) => {
 				</mesh>
 			</group>
 
-
 			{modelType==='gable_building'&&<GableTruss />}
 			{modelType==='lofted_building'&&< LoftedTruss />}
 		</>

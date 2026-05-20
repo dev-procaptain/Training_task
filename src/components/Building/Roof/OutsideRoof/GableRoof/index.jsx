@@ -1,9 +1,9 @@
 import React from 'react'
-import {TextureLoader} from 'three'
 import {useLoader} from '@react-three/fiber';
 import {useSelector} from 'react-redux';
 import * as THREE from 'three';
 import {extrudeSetting} from '../../../../../utils/Function';
+import {TextureLoader} from 'three'
 import roofTexture from '../../../../../assets/imgs/silver_birch.png'
 
 const GableRoof=() => {
@@ -22,17 +22,14 @@ const GableRoof=() => {
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
 
 	const pitchRatio=pitchRise/12;
-	const wallWidth=width+6;
-	const wallHeight=height+5;
 	const roofOverhangL=20;
 	const railThk=4;
 	const roofAngle=Math.atan(pitchRatio);
 	const railWidth=railThk/Math.sin(Math.PI/2-roofAngle);
+	const railHeight=railThk/Math.cos(roofAngle);
 	const roofOverhangX=Math.cos(roofAngle)*roofOverhangL;
 	const roofOverhangY=Math.sin(roofAngle)*roofOverhangL;
-	const railHeight=railThk/Math.cos(roofAngle);
 	const roofHeight=(width/2-railHeight-1)*pitchRatio;
-
 
 	const roofBottomShape=new THREE.Shape();
 	roofBottomShape.moveTo(-width/2-roofOverhangX,-roofOverhangY);
@@ -60,8 +57,6 @@ const GableRoof=() => {
 	frontOutTrimShape.lineTo(0,roofHeight+railHeight+1+railWidth*2+1.5);
 	frontOutTrimShape.lineTo(-width/2-roofOverhangX,-roofOverhangY+railWidth*2+1.5);
 	frontOutTrimShape.closePath();
-
-
 	//const frontInnerTrimShape=new THREE.Shape();
 	//frontInnerTrimShape.moveTo(-wallWidth/2-roofOverhangX,wallHeight-roofOverhangY);
 	//frontInnerTrimShape.lineTo(-wallWidth/2-roofOverhangX,wallHeight-roofOverhangY+2);
@@ -111,7 +106,6 @@ const GableRoof=() => {
 						metalness={0}
 					/>
 				</mesh>
-
 			</group>
 
 			<group name='trim'  >
@@ -123,6 +117,7 @@ const GableRoof=() => {
 					<extrudeGeometry args={[frontOutTrimShape,extrudeSetting(2)]} />
 					<meshLambertMaterial color={'#8c8c8c'} />
 				</mesh>
+
 				{/*
 				<mesh name='frontInnerTrim' position={[0,-railWidth,-length/2-10]}>
 					<extrudeGeometry args={[frontInnerTrimShape,extrudeSetting(8)]} />

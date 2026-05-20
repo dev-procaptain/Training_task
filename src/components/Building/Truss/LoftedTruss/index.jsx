@@ -19,18 +19,23 @@ const LoftedTruss=() => {
   const length=useSelector((state) => state.building.buildingLength);
   const height=useSelector((state) => state.building.buildingHeight);
   const pitchRise=useSelector((state) => state.building.buildingPitch);
+  const tanRoofAngle=pitchRise/12;
   const dstRailL=30;
-  const pitchRatio=pitchRise/12;
   const railThickness=3;
-  const railWidth=4;
-  const roofWidth=width-2-railWidth*2;
-  const roofHeight=(roofWidth/2)*pitchRatio;
-  const roofBottomHeight=(roofWidth/2)*pitchRatio/3*2;
-  const roofBottomPitchRatio=pitchRatio*1.5;
-  const roofWidthone=roofBottomHeight/roofBottomPitchRatio;
+  const railThk=4;
+  const roofWidth=width-2;
+  const roofHeight=roofWidth/2*tanRoofAngle;
+  const roofBottomHeight=(roofWidth/2)*tanRoofAngle/3*2;
+  const tanRoofbottomAngle=tanRoofAngle*1.3;
+  const roofWidthone=roofBottomHeight/tanRoofbottomAngle;
+  const tanRoofTopAngle=(roofWidth/2-roofWidthone)/(roofHeight-roofBottomHeight);
+  const railWidth=railThk*Math.sqrt(1+tanRoofbottomAngle*tanRoofbottomAngle)/tanRoofbottomAngle;
+  const railHeight=railThk*Math.sqrt(1+tanRoofTopAngle*tanRoofTopAngle)/tanRoofTopAngle;
+  const innerRoofWidth=tanRoofTopAngle*(tanRoofbottomAngle*(roofWidth/2-railWidth)-(roofHeight-railHeight))/(tanRoofbottomAngle*tanRoofTopAngle-1);
+  const innerRoofHeight=tanRoofbottomAngle*(tanRoofTopAngle*(roofHeight-railHeight)-(roofWidth/2-railWidth))/(tanRoofbottomAngle*tanRoofTopAngle-1);
   const usableLength=length-3;
   const railCount=Math.floor(usableLength/dstRailL);
-  const spacing=(usableLength-railThickness*railCount)/(railCount-1);
+  const spacing=(usableLength-railThickness*(railCount))/(railCount-1);
 
   const roofBaseRail=useMemo(() => {
     const roofBaseRailModel=[];
@@ -42,9 +47,9 @@ const LoftedTruss=() => {
         roofBaseShape.moveTo(dir*(roofWidth/2),0);
         roofBaseShape.lineTo(dir*(roofWidth/2-roofWidthone),roofBottomHeight);
         roofBaseShape.lineTo(0,roofHeight);
-        roofBaseShape.lineTo(0,roofHeight+railWidth);
-        roofBaseShape.lineTo(dir*(roofWidth/2-roofWidthone),roofBottomHeight+railWidth);
-        roofBaseShape.lineTo(dir*(roofWidth/2+railWidth),0);
+        roofBaseShape.lineTo(0,roofHeight-railHeight);
+        roofBaseShape.lineTo(dir*innerRoofWidth,innerRoofHeight);
+        roofBaseShape.lineTo(dir*(roofWidth/2-railWidth),0);
         roofBaseShape.closePath();
 
         roofBaseRailModel.push({
@@ -75,7 +80,7 @@ const LoftedTruss=() => {
             ]}
           >
 
-            <extrudeGeometry args={[item.shape,extrudeSetting(3)]} />
+            <extrudeGeometry args={[item.shape,extrudeSetting(railThickness)]} />
             <meshStandardMaterial
               bumpMap={colorMap}
               bumpScale={0.2}
@@ -94,3 +99,4 @@ const LoftedTruss=() => {
 };
 
 export default LoftedTruss;
+

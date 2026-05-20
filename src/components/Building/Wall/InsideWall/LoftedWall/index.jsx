@@ -18,19 +18,19 @@ const LoftedWall=() => {
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
-	const pitchRatio=pitchRise/12;
-	const railWidth=4;
-	const roofWidth=width-2-railWidth*2;
-	const roofHeight=(roofWidth/2)*pitchRatio;
-	const roofBottomHeight=(roofWidth/2)*pitchRatio/3*2;
-	const roofBottomPitchRatio=pitchRatio*1.5;
-	const roofWidthone=roofBottomHeight/roofBottomPitchRatio;
+
+	const tanRoofAngle=pitchRise/12;
+	const roofWidth=width-2;
+	const roofHeight=roofWidth/2*tanRoofAngle;
+	const roofBottomHeight=(roofWidth/2)*tanRoofAngle/3*2;
+	const tanRoofbottomAngle=tanRoofAngle*1.3;
+	const roofWidthone=roofBottomHeight/tanRoofbottomAngle;
 
 	const wall=new THREE.Shape();
-	wall.moveTo(-width/2+1,0);
-	wall.lineTo(-width/2+1+roofWidthone+railWidth,roofBottomHeight+railWidth);
-	wall.lineTo(0,roofHeight+railWidth);
-	wall.lineTo(width/2-1-roofWidthone-railWidth,roofBottomHeight+railWidth);
+	wall.moveTo(-roofWidth/2,0);
+	wall.lineTo(-roofWidth/2+roofWidthone,roofBottomHeight);
+	wall.lineTo(0,roofHeight);
+	wall.lineTo(roofWidth/2-roofWidthone,roofBottomHeight);
 	wall.lineTo(width/2-1,0);
 	wall.closePath();
 

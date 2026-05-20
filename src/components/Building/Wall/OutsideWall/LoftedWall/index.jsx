@@ -18,33 +18,39 @@ const LoftedWall=() => {
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
-	const pitchRatio=pitchRise/12;
-	const railWidth=4;
-	const roofWidth=width-2-railWidth*2;
-	const roofHeight=(roofWidth/2)*pitchRatio;
-	const roofBottomHeight=(roofWidth/2)*pitchRatio/3*2;
-	const roofBottomPitchRatio=pitchRatio*1.5;
-	const roofWidthone=roofBottomHeight/roofBottomPitchRatio;
+	const tanRoofAngle=pitchRise/12;
+	const dstRailL=30;
+	const railThickness=3;
+	const railThk=1;
+	const roofWidth=width-2;
+	const roofHeight=roofWidth/2*tanRoofAngle;
+	const roofBottomHeight=(roofWidth/2)*tanRoofAngle/3*2;
+	const tanRoofbottomAngle=tanRoofAngle*1.3;
+	const roofWidthone=roofBottomHeight/tanRoofbottomAngle;
+	const tanRoofTopAngle=(roofWidth/2-roofWidthone)/(roofHeight-roofBottomHeight);
+	const railWidth=railThk*Math.sqrt(1+tanRoofbottomAngle*tanRoofbottomAngle)/tanRoofbottomAngle;
+	const railHeight=railThk*Math.sqrt(1+tanRoofTopAngle*tanRoofTopAngle)/tanRoofTopAngle;
+	const outerRoofWidth=tanRoofTopAngle*(tanRoofbottomAngle*(roofWidth/2+railWidth)-(roofHeight+railHeight))/(tanRoofbottomAngle*tanRoofTopAngle-1);
+	const outerRoofHeight=tanRoofbottomAngle*(tanRoofTopAngle*(roofHeight+railHeight)-(roofWidth/2+railWidth))/(tanRoofbottomAngle*tanRoofTopAngle-1);
+	const usableLength=length-3;
+	const railCount=Math.floor(usableLength/dstRailL);
+	const spacing=(usableLength-railThickness*(railCount))/(railCount-1);
 
-	const wallWidth=width+4;
-	const wallWidthOne=railWidth+roofWidthone+2;
-	const wallHeight=height+5+roofHeight+railWidth+1;
-	const wallBottomHeight=height+roofBottomHeight+5+railWidth+1;
 
 	const wallFrontShape=new THREE.Shape()
-	wallFrontShape.moveTo(-wallWidth/2,-5);
-	wallFrontShape.lineTo(-wallWidth/2,height+5);
-	wallFrontShape.lineTo(-wallWidth/2+wallWidthOne,wallBottomHeight);
-	wallFrontShape.lineTo(0,wallHeight);
-	wallFrontShape.lineTo(wallWidth/2-wallWidthOne,wallBottomHeight);
-	wallFrontShape.lineTo(wallWidth/2,height+5);
-	wallFrontShape.lineTo(wallWidth/2,-5);
+	wallFrontShape.moveTo(-width/2-2,-5);
+	wallFrontShape.lineTo(-width/2-2,height+5);
+	wallFrontShape.lineTo(-outerRoofWidth,outerRoofHeight+height+5);
+	wallFrontShape.lineTo(0,roofHeight+height+5+railHeight);
+	wallFrontShape.lineTo(outerRoofWidth,outerRoofHeight+height+5);
+	wallFrontShape.lineTo(width/2+2,height+5);
+	wallFrontShape.lineTo(width/2+2,-5);
 	wallFrontShape.closePath();
 
 	return (
 		<>
 			<group>
-				<mesh name='front_wall' position={[0,0,length/2]} >
+				<mesh name='front_wall' position={[0,0,length/2+1]} >
 					<extrudeGeometry args={[wallFrontShape,extrudeSetting(2)]} />
 					<meshLambertMaterial
 						bumpMap={colorMap}
@@ -56,7 +62,7 @@ const LoftedWall=() => {
 						metalness={0}
 					/>
 				</mesh>
-				<mesh name='back_wall' position={[0,0,-length/2-2]} >
+				<mesh name='back_wall' position={[0,0,-length/2-3]} >
 					<extrudeGeometry args={[wallFrontShape,extrudeSetting(2)]} />
 					<meshLambertMaterial
 						bumpMap={colorMap}

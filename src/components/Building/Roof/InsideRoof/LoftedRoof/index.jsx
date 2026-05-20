@@ -18,25 +18,29 @@ const LoftedRoof=() => {
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
-	const pitchRatio=pitchRise/12;
-	const railWidth=4;
-	const roofWidth=width-2-railWidth*2;
-	const roofHeight=(roofWidth/2)*pitchRatio;
-	const roofBottomHeight=(roofWidth/2)*pitchRatio/3*2;
-	const roofBottomPitchRatio=pitchRatio*1.5;
-	const roofWidthone=roofBottomHeight/roofBottomPitchRatio;
+	const tanRoofAngle=pitchRise/12;
+	const railThk=1;
+	const roofHeight=width/2*tanRoofAngle;
+	const roofBottomHeight=(width/2)*tanRoofAngle/3*2;
+	const tanRoofbottomAngle=tanRoofAngle*1.3;
+	const roofWidthone=roofBottomHeight/tanRoofbottomAngle;
+	const tanRoofTopAngle=(width/2-roofWidthone)/(roofHeight-roofBottomHeight);
+	const railWidth=railThk*Math.sqrt(1+tanRoofbottomAngle*tanRoofbottomAngle)/tanRoofbottomAngle;
+	const railHeight=railThk*Math.sqrt(1+tanRoofTopAngle*tanRoofTopAngle)/tanRoofTopAngle;
+	const outerRoofWidth=tanRoofTopAngle*(tanRoofbottomAngle*(width/2-railWidth)-(roofHeight-railHeight))/(tanRoofbottomAngle*tanRoofTopAngle-1);
+	const outerRoofHeight=tanRoofbottomAngle*(tanRoofTopAngle*(roofHeight-railHeight)-(width/2-railWidth))/(tanRoofbottomAngle*tanRoofTopAngle-1);
 
 	const roofShape=new THREE.Shape();
-	roofShape.moveTo(-width/2+1,0);
-	roofShape.lineTo(-width/2+1+roofWidthone+railWidth,roofBottomHeight+railWidth);
-	roofShape.lineTo(0,roofHeight+railWidth);
-	roofShape.lineTo(width/2-1-roofWidthone-railWidth,roofBottomHeight+railWidth);
-	roofShape.lineTo(width/2-1,0);
-	roofShape.lineTo(width/2,0);
-	roofShape.lineTo(width/2-1-roofWidthone-railWidth,roofBottomHeight+railWidth+1);
-	roofShape.lineTo(0,roofHeight+railWidth+1);
-	roofShape.lineTo(-width/2+1+roofWidthone+railWidth,roofBottomHeight+railWidth+1);
+	roofShape.moveTo(width/2,0);
+	roofShape.lineTo(width/2-roofWidthone,roofBottomHeight);
+	roofShape.lineTo(0,roofHeight);
+	roofShape.lineTo(-width/2+roofWidthone,roofBottomHeight);
 	roofShape.lineTo(-width/2,0);
+	roofShape.lineTo(-width/2+railWidth,0);
+	roofShape.lineTo(-outerRoofWidth,outerRoofHeight);
+	roofShape.lineTo(0,roofHeight-railHeight);
+	roofShape.lineTo(outerRoofWidth,outerRoofHeight);
+	roofShape.lineTo(width/2-railWidth,0);
 	roofShape.closePath();
 
 	return (
