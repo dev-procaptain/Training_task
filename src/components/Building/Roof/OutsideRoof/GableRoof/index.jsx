@@ -20,6 +20,7 @@ const GableRoof=() => {
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
+	const transParent = useSelector((state) => state.controlReducer.transparentBuild);
 
 	const pitchRatio=pitchRise/12;
 	const roofOverhangL=20;
@@ -92,7 +93,11 @@ const GableRoof=() => {
 			<group name='roof'>
 				<mesh position={[0,height+6,-length/2-10]}>
 					<extrudeGeometry args={[roofBottomShape,extrudeSetting(length+20)]} />
-					<meshLambertMaterial color={'#8c8c8c'} />
+					<meshLambertMaterial 
+						color={'#8c8c8c'} 
+						transparent
+						opacity={transParent ? 0.05 : 1}
+					/>
 				</mesh>
 				<mesh position={[0,height+6.5+railWidth*2,-length/2-10]}>
 					<extrudeGeometry args={[roofTopShape,extrudeSetting(length+20)]} />
@@ -104,6 +109,8 @@ const GableRoof=() => {
 						side={THREE.DoubleSide}
 						roughness={0.8}
 						metalness={0}
+						transparent
+						opacity={transParent ? 0.05 : 1}
 					/>
 				</mesh>
 			</group>
@@ -111,11 +118,19 @@ const GableRoof=() => {
 			<group name='trim'  >
 				<mesh name='frontOutTrim' position={[0,height+6,-length/2-12]}>
 					<extrudeGeometry args={[frontOutTrimShape,extrudeSetting(2)]} />
-					<meshLambertMaterial color={'#8c8c8c'} />
+					<meshLambertMaterial 
+						color={'#8c8c8c'}
+						transparent
+						opacity={transParent ? 0.05 : 1}
+					 />
 				</mesh>
 				<mesh name='backOutTrim' position={[0,height+6,length/2+10]}>
 					<extrudeGeometry args={[frontOutTrimShape,extrudeSetting(2)]} />
-					<meshLambertMaterial color={'#8c8c8c'} />
+					<meshLambertMaterial 
+						color={'#8c8c8c'} 
+						transparent
+						opacity={transParent ? 0.05 : 1}
+					/>
 				</mesh>
 
 				{/*

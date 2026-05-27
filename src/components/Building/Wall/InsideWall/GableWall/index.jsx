@@ -18,6 +18,8 @@ const GableWall=() => {
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
+	const transParent = useSelector((state) => state.controlReducer.transparentBuild);
+	
 	const pitchRatio=pitchRise/12;
 	const railWidth=4;
 	const roofHeight=(width/2-railWidth-1)*pitchRatio;
@@ -41,6 +43,8 @@ const GableWall=() => {
 						side={THREE.DoubleSide}
 						roughness={0.8}
 						metalness={0}
+						transparent
+						opacity={transParent ? 0.05 :1}
 					/>
 				</mesh>
 				<mesh name='backwall' position={[0,height+5,-length/2]}>
@@ -53,6 +57,8 @@ const GableWall=() => {
 						side={THREE.DoubleSide}
 						roughness={0.8}
 						metalness={0}
+						transparent
+						opacity={transParent ? 0.05 :1}
 					/>
 				</mesh>
 			</group>

@@ -51,3 +51,30 @@ export const setDoorMethod = (method) => {
     });
   };
 };
+
+export const setAutoRotate = (method) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_AUTO_ROTATE',
+      payload: method,
+    });
+  };
+};
+
+export const setInsideRotate = (distance) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_Inside_Build',
+      payload: distance,
+    });
+  };
+};
+
+export const setTransparent = (method) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_Transparent_Build',
+      payload: method,
+    });
+  };
+};

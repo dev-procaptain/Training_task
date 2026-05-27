@@ -20,6 +20,7 @@ const OutsideWall=({modelType}) => {
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
 	const width=useSelector((state) => state.building.buildingWidth);
+	const transParent = useSelector((state) => state.controlReducer.transparentBuild);
 
 	const wallSideShape=new THREE.Shape();
 	wallSideShape.moveTo(-length/2-3,-5);
@@ -39,6 +40,8 @@ const OutsideWall=({modelType}) => {
 					side={THREE.DoubleSide}
 					roughness={0.8}
 					metalness={0}
+					transparent
+					opacity={transParent ? 0.05 : 1}
 				/>
 			</mesh>
 			<mesh name='right wall' rotation={[0,Math.PI/2,0]} position={[width/2+2,0,0]} >
@@ -51,6 +54,8 @@ const OutsideWall=({modelType}) => {
 					side={THREE.DoubleSide}
 					roughness={0.8}
 					metalness={0}
+					transparent
+					opacity={transParent ? 0.05 : 1}
 				/>
 			</mesh>
 			{modelType==='gable_building'&&<GableWall />}

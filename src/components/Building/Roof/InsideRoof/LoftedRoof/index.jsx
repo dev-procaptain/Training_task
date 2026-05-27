@@ -18,6 +18,8 @@ const LoftedRoof=() => {
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
+	const transParent = useSelector((state) => state.controlReducer.transparentBuild);
+	
 	const tanRoofAngle=pitchRise/12;
 	const railThk=1;
 	const roofHeight=width/2*tanRoofAngle;
@@ -56,6 +58,8 @@ const LoftedRoof=() => {
 						side={THREE.DoubleSide}
 						roughness={0.8}
 						metalness={0}
+						transparent
+						opacity={transParent ? 0.05 : 1}
 					/>
 				</mesh>
 			</group>

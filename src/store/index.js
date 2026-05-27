@@ -22,4 +22,7 @@ export {
   setBuildingHeight,
   setBuildingPitch,
   setDoorMethod,
+  setAutoRotate,
+  setInsideRotate,
+  setTransparent,
 } from './Action';

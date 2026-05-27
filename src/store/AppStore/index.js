@@ -1,6 +1,6 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import { thunk } from 'redux-thunk';
-import buildingReducer from '../Reducer';
+import buildingReducer, {controlReducer} from '../Reducer';
 
 const composeEnhancers =
   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -9,6 +9,7 @@ const composeEnhancers =
 
 const rootReducer = combineReducers({
   building: buildingReducer,
+  controlReducer: controlReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

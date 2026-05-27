@@ -18,6 +18,7 @@ const LoftedWall=() => {
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
+	const transParent = useSelector((state) => state.controlReducer.transparentBuild);
 
 	const tanRoofAngle=pitchRise/12;
 	const roofWidth=width-2;
@@ -47,6 +48,8 @@ const LoftedWall=() => {
 						side={THREE.DoubleSide}
 						roughness={0.8}
 						metalness={0}
+						transparent
+						opacity={transParent ? 0.05 : 1}
 					/>
 				</mesh>
 				<mesh name='back wall' position={[0,height+5,-length/2]}>
@@ -59,6 +62,8 @@ const LoftedWall=() => {
 						side={THREE.DoubleSide}
 						roughness={0.8}
 						metalness={0}
+						transparent
+						opacity={transParent ? 0.05 : 1}
 					/>
 				</mesh>
 			</group>

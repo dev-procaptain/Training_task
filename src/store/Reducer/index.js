@@ -14,7 +14,37 @@ export const initialState = {
   doorMethod: 'method1',
 };
 
-const reducer = (state = initialState, action) => {
+export const controlInitalState = {
+  rotateBuild: false,
+  insideBuild: false,
+  transparentBuild: false,
+}
+
+export const controlReducer = (state = controlInitalState, action) => {
+  switch (action.type) {
+    case 'SET_AUTO_ROTATE': 
+      return {
+        ...state,
+        rotateBuild: action.payload
+    }
+    
+    case 'SET_Inside_Build':
+      return {
+        ...state,
+        insideBuild: action.payload
+      }
+      
+      case 'SET_Transparent_Build':
+        return {
+          ...state,
+          transparentBuild: action.payload
+        }
+  default:
+    return state;
+  }
+}
+
+ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_MODEL_TYPE': {
       const dimensions = getDimensionsForModelType(action.payload);

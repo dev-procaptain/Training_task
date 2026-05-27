@@ -20,6 +20,7 @@ const InsideWall=({modelType}) => {
 	const width=useSelector((state) => state.building.buildingWidth);
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
+	const transParent = useSelector((state) => state.controlReducer.transparentBuild);
 
 	const frontBottomWall=new THREE.Shape()
 	frontBottomWall.moveTo(-width/2,0);
@@ -48,6 +49,8 @@ const InsideWall=({modelType}) => {
 						side={THREE.DoubleSide}
 						roughness={0.8}
 						metalness={0}
+						transparent
+						opacity={transParent ? 0.05 : 1}
 					/>
 				</mesh>
 				<mesh name='backwall' position={[0,0,-length/2]}>
@@ -60,6 +63,8 @@ const InsideWall=({modelType}) => {
 						side={THREE.DoubleSide}
 						roughness={0.8}
 						metalness={0}
+						transparent
+						opacity={transParent ? 0.05 : 1}
 					/>
 				</mesh>
 				<mesh name='leftwall' rotation={[0,Math.PI/2,0]} position={[-width/2,0,0]}>
@@ -72,6 +77,8 @@ const InsideWall=({modelType}) => {
 						side={THREE.DoubleSide}
 						roughness={0.8}
 						metalness={0}
+						transparent
+						opacity={transParent ? 0.05 : 1}
 					/>
 				</mesh>
 				<mesh name='rightwall' rotation={[0,Math.PI/2,0]} position={[width/2-1.5,0,0]}>
@@ -84,6 +91,8 @@ const InsideWall=({modelType}) => {
 						side={THREE.DoubleSide}
 						roughness={0.8}
 						metalness={0}
+						transparent
+						opacity={transParent ? 0.05 : 1}
 					/>
 				</mesh>
 			</group>

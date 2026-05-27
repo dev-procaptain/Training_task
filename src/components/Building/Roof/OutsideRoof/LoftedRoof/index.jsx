@@ -21,7 +21,8 @@ const LoftedRoof=() => {
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
-
+	const transParent = useSelector((state) => state.controlReducer.transparentBuild);
+	
 	const tanRoofAngle=pitchRise/12;
 	const trimRailThk=8;
 	const roofTrimThk=1;
@@ -74,7 +75,11 @@ const LoftedRoof=() => {
 			<group>
 				<mesh name='roof_Trim' position={[0,height+6,-length/2-10]}>
 					<extrudeGeometry args={[roofBottomShape,extrudeSetting(length+20)]} />
-					<meshLambertMaterial color={'#8c8c8c'} />
+					<meshLambertMaterial 
+						color={'#8c8c8c'} 
+						transparent
+						opacity={transParent ? 0.05 : 1}
+					/>
 				</mesh>
 				<mesh name='roof' position={[0,height+6,-length/2-10]}>
 					<extrudeGeometry args={[roofTopShape,extrudeSetting(length+20)]} />
@@ -86,6 +91,8 @@ const LoftedRoof=() => {
 						side={THREE.DoubleSide}
 						roughness={0.8}
 						metalness={0}
+						transparent
+						opacity={transParent ? 0.05 : 1}
 					/>
 				</mesh>
 			</group>

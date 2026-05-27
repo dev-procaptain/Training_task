@@ -18,6 +18,7 @@ const GableRoof=() => {
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
+	const transParent = useSelector((state) => state.controlReducer.transparentBuild);
 	const pitchRatio=pitchRise/12;
 	const railThk=4;
 	const roofAngle=Math.atan(pitchRatio);
@@ -43,10 +44,13 @@ const GableRoof=() => {
 						bumpMap={colorMap}
 						bumpScale={0.2}
 						map={colorMap}
-						color={'#8c8c8c'}
+						color={transParent ? 'white' : '#8c8c8c'}
 						side={THREE.DoubleSide}
 						roughness={0.8}
+						emissive={'#353535'} 
 						metalness={0}
+						opacity={transParent ? 0.05 : 1}
+						transparent
 					/>
 				</mesh>
 			</group>
