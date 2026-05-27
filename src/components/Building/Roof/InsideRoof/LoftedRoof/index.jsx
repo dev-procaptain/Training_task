@@ -24,7 +24,7 @@ const LoftedRoof=() => {
 	const railThk=1;
 	const roofHeight=width/2*tanRoofAngle;
 	const roofBottomHeight=(width/2)*tanRoofAngle/3*2;
-	const tanRoofbottomAngle=tanRoofAngle*1.3;
+	const tanRoofbottomAngle=tanRoofAngle*1.7;
 	const roofWidthone=roofBottomHeight/tanRoofbottomAngle;
 	const tanRoofTopAngle=(width/2-roofWidthone)/(roofHeight-roofBottomHeight);
 	const railWidth=railThk*Math.sqrt(1+tanRoofbottomAngle*tanRoofbottomAngle)/tanRoofbottomAngle;

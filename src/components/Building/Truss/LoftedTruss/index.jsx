@@ -26,7 +26,7 @@ const LoftedTruss=() => {
   const roofWidth=width-2;
   const roofHeight=roofWidth/2*tanRoofAngle;
   const roofBottomHeight=(roofWidth/2)*tanRoofAngle/3*2;
-  const tanRoofbottomAngle=tanRoofAngle*1.3;
+  const tanRoofbottomAngle=tanRoofAngle*1.7;
   const roofWidthone=roofBottomHeight/tanRoofbottomAngle;
   const tanRoofTopAngle=(roofWidth/2-roofWidthone)/(roofHeight-roofBottomHeight);
   const railWidth=railThk*Math.sqrt(1+tanRoofbottomAngle*tanRoofbottomAngle)/tanRoofbottomAngle;

@@ -27,7 +27,7 @@ const LoftedRoof=() => {
 	const trimRailThk=8;
 	const roofTrimThk=1;
 	const roofOverhangL=30;
-	const tanRoofbottomAngle=tanRoofAngle*1.3;
+	const tanRoofbottomAngle=tanRoofAngle*1.7;
 	const roofOverhangY=tanRoofbottomAngle/Math.sqrt(1+tanRoofbottomAngle*tanRoofbottomAngle)*roofOverhangL;
 	const roofOverhangX=roofOverhangL/Math.sqrt(1+tanRoofbottomAngle*tanRoofbottomAngle);
 
@@ -36,6 +36,7 @@ const LoftedRoof=() => {
 	const roofWidthone=roofBottomHeight/tanRoofbottomAngle;
 	const tanRoofTopAngle=(width/2-roofWidthone)/(roofHeight-roofBottomHeight);
 	const trimRailWidth=trimRailThk*Math.sqrt(1+tanRoofbottomAngle*tanRoofbottomAngle)/tanRoofbottomAngle;
+	const trimBottomRailHeight=trimRailThk*Math.sqrt(1+tanRoofbottomAngle*tanRoofbottomAngle);
 	const trimRailHeight=trimRailThk*Math.sqrt(1+tanRoofTopAngle*tanRoofTopAngle)/tanRoofTopAngle;
 	const roofRailWidth=roofTrimThk*Math.sqrt(1+tanRoofbottomAngle*tanRoofbottomAngle)/tanRoofbottomAngle;
 	const roofRailHeight=roofTrimThk*Math.sqrt(1+tanRoofTopAngle*tanRoofTopAngle)/tanRoofTopAngle;
@@ -50,24 +51,24 @@ const LoftedRoof=() => {
 	roofBottomShape.lineTo(0,roofHeight);
 	roofBottomShape.lineTo(-width/2+roofWidthone,roofBottomHeight);
 	roofBottomShape.lineTo(-width/2-roofOverhangX,0-roofOverhangY);
-	roofBottomShape.lineTo(-width/2-trimRailWidth-roofOverhangX,0-roofOverhangY);
+	roofBottomShape.lineTo(-width/2-roofOverhangX,0-roofOverhangY+trimBottomRailHeight);
 	roofBottomShape.lineTo(-outerRoofTrimWidth,outerRoofTrimHeight);
 	roofBottomShape.lineTo(0,roofHeight+trimRailHeight);
 	roofBottomShape.lineTo(outerRoofTrimWidth,outerRoofTrimHeight);
-	roofBottomShape.lineTo(width/2+roofOverhangX+trimRailWidth,0-roofOverhangY);
+	roofBottomShape.lineTo(width/2+roofOverhangX,0-roofOverhangY+trimBottomRailHeight);
 	roofBottomShape.closePath();
 
 	const roofTopShape=new THREE.Shape();
-	roofTopShape.moveTo(width/2+roofOverhangX+trimRailWidth,0-roofOverhangY);
+	roofTopShape.moveTo(width/2+roofOverhangX,0-roofOverhangY+trimBottomRailHeight);
 	roofTopShape.lineTo(outerRoofTrimWidth,outerRoofTrimHeight);
 	roofTopShape.lineTo(0,roofHeight+trimRailHeight);
 	roofTopShape.lineTo(-outerRoofTrimWidth,outerRoofTrimHeight);
-	roofTopShape.lineTo(-width/2-roofOverhangX-trimRailWidth,0-roofOverhangY);
-	roofTopShape.lineTo(-width/2-roofOverhangX-trimRailWidth-roofRailWidth,0-roofOverhangY);
+	roofTopShape.lineTo(-width/2-roofOverhangX,0-roofOverhangY+trimBottomRailHeight);
+	roofTopShape.lineTo(-width/2-roofOverhangX,0-roofOverhangY+trimBottomRailHeight+roofTrimThk);
 	roofTopShape.lineTo(-outerRoofWidth,outerRoofHeight);
 	roofTopShape.lineTo(0,roofHeight+trimRailHeight+roofRailHeight);
 	roofTopShape.lineTo(outerRoofWidth,outerRoofHeight);
-	roofTopShape.lineTo(width/2+roofOverhangX+trimRailWidth+roofRailWidth,0-roofOverhangY);
+	roofTopShape.lineTo(width/2+roofOverhangX,0-roofOverhangY+trimBottomRailHeight+roofTrimThk);
 	roofTopShape.closePath();
 
 	return (

@@ -19,7 +19,6 @@ const LoftedWall=() => {
 	const height=useSelector((state) => state.building.buildingHeight);
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
 	const transParent = useSelector((state) => state.controlReducer.transparentBuild);
-	
 	const tanRoofAngle=pitchRise/12;
 	const dstRailL=30;
 	const railThickness=3;
@@ -27,7 +26,7 @@ const LoftedWall=() => {
 	const roofWidth=width-2;
 	const roofHeight=roofWidth/2*tanRoofAngle;
 	const roofBottomHeight=(roofWidth/2)*tanRoofAngle/3*2;
-	const tanRoofbottomAngle=tanRoofAngle*1.3;
+	const tanRoofbottomAngle=tanRoofAngle*1.7;
 	const roofWidthone=roofBottomHeight/tanRoofbottomAngle;
 	const tanRoofTopAngle=(roofWidth/2-roofWidthone)/(roofHeight-roofBottomHeight);
 	const railWidth=railThk*Math.sqrt(1+tanRoofbottomAngle*tanRoofbottomAngle)/tanRoofbottomAngle;
