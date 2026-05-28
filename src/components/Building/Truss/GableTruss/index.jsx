@@ -131,6 +131,18 @@ const GableTruss=() => {
 					metalness={0}
 				/>
 			</mesh>
+			<mesh position={[0,height+5,-length/2+1.5]}>
+				<extrudeGeometry args={[roofBaseRail.roofBaseRailModel,extrudeSetting(3)]} />
+				<meshStandardMaterial
+					bumpMap={colorMap}
+					bumpScale={0.2}
+					map={colorMap}
+					color={'#8c8c8c'}
+					side={THREE.DoubleSide}
+					roughness={0.8}
+					metalness={0}
+				/>
+			</mesh>
 			<group name='roofTruss'>
 				{
 					baseSideRail.roofTrussGap.map((item,index) => (

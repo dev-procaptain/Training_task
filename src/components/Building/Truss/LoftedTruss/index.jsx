@@ -34,14 +34,39 @@ const LoftedTruss=() => {
   const innerRoofWidth=tanRoofTopAngle*(tanRoofbottomAngle*(roofWidth/2-railWidth)-(roofHeight-railHeight))/(tanRoofbottomAngle*tanRoofTopAngle-1);
   const innerRoofHeight=tanRoofbottomAngle*(tanRoofTopAngle*(roofHeight-railHeight)-(roofWidth/2-railWidth))/(tanRoofbottomAngle*tanRoofTopAngle-1);
   const usableLength=length-3;
-  const railCount=Math.floor(usableLength/dstRailL);
-  const spacing=(usableLength-railThickness*(railCount))/(railCount-1);
-
+  const usableWidth = width - railThk * 2 - 2;
+  const railLCount = Math.floor(usableLength/dstRailL);
+  const lSpacing=(usableLength-railThickness*(railLCount))/(railLCount - 1);
+  
+  const roofFrontBaseRail = useMemo(() => {
+    const railWCount = Math.floor(usableWidth / dstRailL);
+    const wSpacing = (usableWidth - railThk * railWCount) / (railWCount - 1);
+    const roofFrontBaseRailModel = [];
+    const startX = width / 2 - 1 - railThk;
+    [-1, 1].forEach((dir) => {
+      for(let row = 0; row < railWCount / 2; row++) {
+        const x1 = startX - row * (wSpacing + railThk);
+        const x2 = startX - railThk - row * (wSpacing + railThk);
+        const y1 = x1 > (width / 2 - railWidth - roofWidthone - 1) ? (width / 2 - x1 - railWidth - 1) * tanRoofbottomAngle : innerRoofHeight + (innerRoofWidth - x1) / tanRoofTopAngle;
+        const y2 = x2 > (width / 2 - railWidth - roofWidthone - 1) ? (width / 2 - x2 - railWidth - 1) * tanRoofbottomAngle : innerRoofHeight + (innerRoofWidth - x2) / tanRoofTopAngle;
+        const shape = new THREE.Shape();
+        shape.moveTo(dir * x1, 0);
+        shape.lineTo(dir * x1, y1);
+        shape.lineTo(dir * x2, y2);
+        shape.lineTo(dir * x2, 0);
+        shape.closePath();
+        
+        roofFrontBaseRailModel.push(shape);
+      }
+    }) 
+    return  roofFrontBaseRailModel;
+  }, [width, height, tanRoofbottomAngle, tanRoofTopAngle, roofBottomHeight, roofWidthone])
+  
   const roofBaseRail=useMemo(() => {
     const roofBaseRailModel=[];
     [-1,1].forEach((dir) => {
 
-      for(let col=0;col<Math.floor(railCount);col++) {
+      for(let col=0;col<Math.floor(railLCount);col++) {
 
         const roofBaseShape=new THREE.Shape();
         roofBaseShape.moveTo(dir*(roofWidth/2),0);
@@ -60,10 +85,35 @@ const LoftedTruss=() => {
     });
     return roofBaseRailModel;
 
-  },[width,height,pitchRise,railCount]);
+  },[width,height,pitchRise,railLCount]);
 
   return (
     <group>
+      
+      <mesh position={[0, height + 5, length/2 - 4.5]}>
+        <extrudeGeometry args={[roofFrontBaseRail, extrudeSetting(3)]} />
+        <meshStandardMaterial
+          bumpMap={colorMap}
+          bumpScale={0.2}
+          map={colorMap}
+          color={'#8c8c8c'}
+          side={THREE.DoubleSide}
+          roughness={0.8}
+          metalness={0}
+        />
+      </mesh>
+      <mesh position={[0, height + 5, -length/2 + 1.5]}>
+        <extrudeGeometry args={[roofFrontBaseRail, extrudeSetting(3)]} />
+        <meshStandardMaterial
+          bumpMap={colorMap}
+          bumpScale={0.2}
+          map={colorMap}
+          color={'#8c8c8c'}
+          side={THREE.DoubleSide}
+          roughness={0.8}
+          metalness={0}
+        />
+      </mesh>
 
       {
         roofBaseRail.map((item,index) => (
@@ -76,7 +126,7 @@ const LoftedTruss=() => {
               length/2-
               railThickness-
               railThickness/2-
-              (spacing+railThickness)*item.index
+              (lSpacing+railThickness)*item.index
             ]}
           >
 
