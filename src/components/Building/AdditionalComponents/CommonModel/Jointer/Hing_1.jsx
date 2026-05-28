@@ -1,8 +1,8 @@
 import React from 'react'
 import * as THREE from 'three';
-import {extrudeSetting} from '../../../utils/Function';
+import {extrudeSetting} from '../../../../../utils/Function';
 
-const Hang = () => {
+const Jointer_1 = () => {
 	const width = 10;
 	const height = 5;
 	const radius = 32;
@@ -73,4 +73,4 @@ const Hang = () => {
 	)
 }
 
-export default Hang
+export default Jointer_1

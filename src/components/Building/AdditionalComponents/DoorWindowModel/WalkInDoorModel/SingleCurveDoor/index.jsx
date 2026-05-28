@@ -4,7 +4,7 @@ import {TextureLoader} from 'three'
 import {useLoader} from '@react-three/fiber';
 
 import { useSelector } from 'react-redux';
-import {extrudeSetting} from '../../../../utils/Function';
+import {extrudeSetting} from '../../../../../../utils/Function';
 import shedTexture from '../../../assets/imgs/horizontal_hardie_plank.jpg';
 
 const SingleCurveDoor=() => {

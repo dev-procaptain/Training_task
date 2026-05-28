@@ -12,6 +12,7 @@ export const initialState = {
   buildingHeight: defaultDimensions.height,
   buildingPitch: defaultDimensions.pitch,
   doorMethod: 'method1',
+  additionalDoorData: defaultDimensions.additionalDoorData,
 };
 
 export const controlInitalState = {
@@ -55,6 +56,7 @@ export const controlReducer = (state = controlInitalState, action) => {
         buildingLength: dimensions.length,
         buildingHeight: dimensions.height,
         buildingPitch: dimensions.pitch,
+        additionalDoorData: dimensions.additionalDoorData,
       };
     }
     case 'SET_BUILDING_WIDTH':

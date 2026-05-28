@@ -14,6 +14,40 @@ export const ResModelData = [
     widthRange: { min: 300, max: 500 },
     lengthRange: { min: 400, max: 600 },
     heightRange: { min: 250, max: 350 },
+    additionalCmpData: [
+      {
+        id: 1,
+        doorType: 'pub_concession_window',
+        direction: 'front',
+        width: 50,
+        height: 30,
+        trimWidth: 0.3,
+      },
+      {
+        id: 2,
+        doorType: 'pub_concession_window',
+        direction: 'back',
+        width: 50,
+        height: 30,
+        trimWidth: 0.3,
+      },
+      {
+        id: 3,
+        doorType: 'double_pattern_door',
+        direction: 'left',
+        width: 40,
+        height: 60,
+        trimWidth: 0.3,
+      },
+      {
+        id: 4,
+        doorType: 'double_pattern_door',
+        direction: 'right',
+        width: 40,
+        height: 60,
+        trimWidth: 0.3,
+      },
+    ],
   },
   {
     type: 'lofted_building',
@@ -28,6 +62,40 @@ export const ResModelData = [
     widthRange: { min: 300, max: 500 },
     lengthRange: { min: 400, max: 600 },
     heightRange: { min: 250, max: 350 },
+    additionalCmpData: [
+      {
+        id: 1,
+        doorType: 'pub_concession_window',
+        direction: 'front',
+        width: 50,
+        height: 30,
+        trimWidth: 0.3,
+      },
+      {
+        id: 2,
+        doorType: 'pub_concession_window',
+        direction: 'back',
+        width: 50,
+        height: 30,
+        trimWidth: 0.3,
+      },
+      {
+        id: 3,
+        doorType: 'double_pattern_door',
+        direction: 'left',
+        width: 40,
+        height: 60,
+        trimWidth: 0.3,
+      },
+      {
+        id: 4,
+        doorType: 'double_pattern_door',
+        direction: 'right',
+        width: 40,
+        height: 60,
+        trimWidth: 0.3,
+      },
+    ],
   },
 ];
 
@@ -51,6 +119,7 @@ export const getDimensionsForModelType = (modelType) => {
       length: model.length,
       height: model.height,
       pitch: pitchToRise(model.pitch),
+      additionalDoorData: model.additionalCmpData || [],
     };
   }
   const fallback = ResModelData[0];
@@ -59,6 +128,7 @@ export const getDimensionsForModelType = (modelType) => {
     length: fallback.length,
     height: fallback.height,
     pitch: pitchToRise(fallback.pitch),
+    additionalDoorData: fallback.additionalCmpData || [],
   };
 };
 

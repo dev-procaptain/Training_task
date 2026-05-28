@@ -1,6 +1,6 @@
 import React from 'react'
 import * as THREE from 'three';
-import {extrudeSetting} from '../../../utils/Function';
+import {extrudeSetting} from '../../../../../utils/Function';
 import {useLoader} from '@react-three/fiber';
 import {TextureLoader} from 'three'
 import roostTexture from '../../../assets/imgs/leg_texture_old.jpg'
