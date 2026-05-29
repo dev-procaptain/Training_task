@@ -77,7 +77,7 @@ export const ResModelData = [
     description: 'A lofted building is a type of building that has a lofted roof.',
     component: 'truss',
     width: 300,
-    length: 150,
+    length: 400,
     height: 150,
     pitch: 5 / 12,
     pitchRange: { min: 3, max: 8 },
