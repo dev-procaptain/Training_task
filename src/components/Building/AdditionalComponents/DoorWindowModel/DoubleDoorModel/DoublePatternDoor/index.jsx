@@ -3,7 +3,10 @@ import Method2 from './Method2';
 
 const DoublePatternDoor = (props) => {
   return (
-    <Method2 {...props} />
+    <>
+      {/*{props.method === 'method1' &&  <Method1 {...props} />};*/}
+      {props.method === 'method2' &&  <Method2 {...props} />};
+    </>
   )
 };
 

@@ -1,11 +1,13 @@
 import React, {useMemo} from 'react'
 import { useSelector } from 'react-redux';
 import DoublePatternDoor from './DoubleDoorModel/DoublePatternDoor';
-import PubConcessionWindow from './WindowModel/PubConcessionWindow';
+import WalkInDoorModel from './WalkInDoorModel';
+import WindowModel from './WindowModel';
 
 const COMPONENT_MAP = {
-   double_pattern_door: DoublePatternDoor,
-    pub_concession_window: PubConcessionWindow,
+    DoubleDoorModel: DoublePatternDoor,
+    WalkInDoorModel: WalkInDoorModel,
+    WindowModel: WindowModel,
 };
 
 const DoorWindowModel = () => {
@@ -13,7 +15,7 @@ const DoorWindowModel = () => {
 
     const renderedItems = useMemo(() => {
         return additionalDoorData.map((item, index) => {
-            const Component = COMPONENT_MAP[item.doorType];
+            const Component = COMPONENT_MAP[item.groupType];
             const props = {
                 key: index,
                 id: item.id,
@@ -22,6 +24,7 @@ const DoorWindowModel = () => {
                 width: item.width,
                 height: item.height,
                 trimWidth: item.trimWidth,
+                method : item.method,
             }
             return <Component {...props} />
         })

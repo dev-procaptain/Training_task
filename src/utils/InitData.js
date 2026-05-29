@@ -17,6 +17,7 @@ export const ResModelData = [
     additionalCmpData: [
       {
         id: 1,
+        groupType: 'WindowModel',
         doorType: 'pub_concession_window',
         direction: 'front',
         width: 50,
@@ -25,6 +26,7 @@ export const ResModelData = [
       },
       {
         id: 2,
+        groupType: 'WindowModel',
         doorType: 'pub_concession_window',
         direction: 'back',
         width: 50,
@@ -33,16 +35,40 @@ export const ResModelData = [
       },
       {
         id: 3,
+        groupType: 'DoubleDoorModel',
         doorType: 'double_pattern_door',
         direction: 'left',
+        method: 'method1',
         width: 150,
         height: 150,
         trimWidth: 0.3,
       },
       {
         id: 4,
+        groupType: 'DoubleDoorModel',
+        doorType: 'double_pattern_door',
+        direction: 'left',
+        method: 'method2',
+        width: 150,
+        height: 150,
+        trimWidth: 0.3,
+      },
+      {
+        id: 5,
+        groupType: 'DoubleDoorModel',
         doorType: 'double_pattern_door',
         direction: 'right',
+        method: 'method1',
+        width: 150,
+        height: 150,
+        trimWidth: 0.3,
+      },
+      {
+        id: 6,
+        groupType: 'DoubleDoorModel',
+        doorType: 'double_pattern_door',
+        direction: 'right',
+        method: 'method2',
         width: 150,
         height: 150,
         trimWidth: 0.3,
@@ -65,6 +91,7 @@ export const ResModelData = [
     additionalCmpData: [
       {
         id: 1,
+        groupType: 'WindowModel',
         doorType: 'pub_concession_window',
         direction: 'front',
         width: 50,
@@ -73,6 +100,7 @@ export const ResModelData = [
       },
       {
         id: 2,
+        groupType: 'WindowModel',
         doorType: 'pub_concession_window',
         direction: 'back',
         width: 50,
@@ -81,6 +109,7 @@ export const ResModelData = [
       },
       {
         id: 3,
+        groupType: 'DoubleDoorModel',
         doorType: 'double_pattern_door',
         direction: 'left',
         width: 100,
@@ -89,6 +118,7 @@ export const ResModelData = [
       },
       {
         id: 4,
+        groupType: 'DoubleDoorModel',
         doorType: 'double_pattern_door',
         direction: 'right',
         width: 100,
