@@ -24,7 +24,6 @@ const DoorWindowModel = () => {
                 width: item.width,
                 height: item.height,
                 trimWidth: item.trimWidth,
-                method : item.method,
             }
             return <Component {...props} />
         })
