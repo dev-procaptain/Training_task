@@ -2,11 +2,11 @@ import * as THREE from 'three';
 import React,{useMemo} from 'react'
 
 import { useSelector } from 'react-redux';
-import {extrudeSetting} from '../../../../../utils/Function';
+import {extrudeSetting} from '../../../../../../../utils/Function';
 
-const Method2=() => {
-	const width = useSelector((state) => state.building.buildingWidth);
-	const height = useSelector((state) => state.building.buildingHeight);
+const Method2=({doorType, width, height, id, trimWidth, direction}) => {
+	const buildingWidth = useSelector((state) => state.building.buildingWidth);
+	//const buildingHeight = useSelector((state) => state.building.buildingHeight);
 	const trimModelThk=4;
 	const innerTrimModelThk=6;
 	const bottomTrimThk=2;
@@ -201,7 +201,7 @@ const Method2=() => {
 	},[width,height])
 
 	return (
-		<>
+		<group rotation={direction === 'left' ? [0, Math.PI / 2, 0] : [0, -Math.PI / 2, 0]} position={direction === 'left' ? [buildingWidth / 2 + 3, 0, 0] : [-buildingWidth / 2 - 3, 0 , 0]}>
 			<group name='trimModel'>
 				<mesh>
 					<extrudeGeometry args={[trimModel.trimMidModelShape,extrudeSetting(5)]} />
@@ -254,7 +254,7 @@ const Method2=() => {
 					<meshPhongMaterial color={'#404040'} />
 				</mesh>
 			</group>
-		</>
+		</group>
 	)
 }
 

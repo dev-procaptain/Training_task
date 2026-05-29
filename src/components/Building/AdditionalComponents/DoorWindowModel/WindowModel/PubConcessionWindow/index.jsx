@@ -1,16 +1,16 @@
 import * as THREE from 'three';
 import {useMemo} from 'react';
-
-import {extrudeSetting} from '../../../../utils/Function';
 import { useSelector } from 'react-redux';
+import {extrudeSetting} from '../../../../../../utils/Function';
 
-const PubConcessionWindow=() => {
+const PubConcessionWindow=({width, height, direction, id, trimWidth}) => {
 
-	const width = useSelector((state) => state.building.buildingWidth);
-	const height = useSelector((state) => state.building.buildingHeight);
-	const trimWidth=0.3;
+	//const buildingWidth = useSelector((state) => state.building.buildingWidth);
+	const buildingHeight = useSelector((state) => state.building.buildingHeight);
+	const buildingLength = useSelector((state) => state.building.buildingLength);
+	//const trimWidth=0.3;
 	const gap=0.1;
-	const trimThk=trimWidth;
+	const trimThk=trimWidth * 5;
 	const offset=trimWidth*1.5;
 
 	const outTrimModel=useMemo(() => {
@@ -132,7 +132,7 @@ const PubConcessionWindow=() => {
 
 	const BottomModel=useMemo(() => {
 		const bottomModelWidth=width;
-		const bottomModelHeight=trimThk*1.5;
+		const bottomModelHeight=trimThk * 5;
 
 		const bottomModelShape=new THREE.Shape();
 		bottomModelShape.moveTo(-bottomModelWidth/2,0);
@@ -186,7 +186,7 @@ const PubConcessionWindow=() => {
 
 	const underModel=useMemo(() => {
 		const underModelWidth=width-offset;
-		const underModelHeight=trimThk*1.5+trimThk;
+		const underModelHeight=trimThk*6;
 		const underModelShape=new THREE.Shape();
 		underModelShape.moveTo(-underModelWidth/2,0);
 		underModelShape.lineTo(-underModelWidth/2,underModelHeight);
@@ -199,14 +199,14 @@ const PubConcessionWindow=() => {
 
 	return (
 		<>
-			<group name='outTrimModel'>
+			<group name='outTrimModel' position={direction === 'front' ? [0, buildingHeight, buildingLength / 2] : [0, buildingHeight, -buildingLength / 2]} rotation={direction === 'front' ? [0, 0, 0] : [0, Math.PI, 0]}>
 				<mesh>
 					<extrudeGeometry args={[outTrimModel.topTrimShape,extrudeSetting(5)]} />
-					<meshPhongMaterial color={'gray'} />
+					<meshPhongMaterial color={'#666666'} />
 				</mesh>
 				<mesh>
 					<extrudeGeometry args={[outTrimModel.sideShape,extrudeSetting(5)]} />
-					<meshPhongMaterial color={'gray'} />
+					<meshPhongMaterial color={'#666666'} />
 				</mesh>
 				<mesh>
 					<extrudeGeometry args={[gapModel.gapTopShape,extrudeSetting(5)]} />
@@ -222,27 +222,27 @@ const PubConcessionWindow=() => {
 				</mesh>
 				<mesh>
 					<extrudeGeometry args={[inTrimModel.inTrimShape,extrudeSetting(5)]} />
-					<meshPhongMaterial color={'gray'} />
+					<meshPhongMaterial color={'#666666'} />
 				</mesh>
 				<mesh>
 					<extrudeGeometry args={[panelModel.panelShapeModel,extrudeSetting(5)]} />
-					<meshPhongMaterial color={'green'} />
+					<meshPhongMaterial color={'#262626'} />
 				</mesh>
 				<mesh rotation={[Math.PI/2,0,0]}>
-					<extrudeGeometry args={[BottomModel.bottomSide,extrudeSetting(2.5)]} />
+					<extrudeGeometry args={[BottomModel.bottomSide,extrudeSetting(2)]} />
 					<meshPhongMaterial color={'#C3E2CC'} />
 				</mesh>
 				<mesh rotation={[Math.PI/2,0,0]}>
-					<extrudeGeometry args={[BottomModel.bottomMidShape,extrudeSetting(2.5)]} />
+					<extrudeGeometry args={[BottomModel.bottomMidShape,extrudeSetting(2)]} />
 					<meshPhongMaterial color={'#C3E2CC'} />
 				</mesh>
 				<mesh rotation={[Math.PI/2,0,0]}>
-					<extrudeGeometry args={[BottomModel.bottomGap,extrudeSetting(2.5)]} />
+					<extrudeGeometry args={[BottomModel.bottomGap,extrudeSetting(2)]} />
 					<meshPhongMaterial color={'black'} />
 				</mesh>
-				<mesh position={[0,-2.5,0]} rotation={[Math.PI/2,0,0]}>
-					<extrudeGeometry args={[underModel.underModelShape,extrudeSetting(5)]} />
-					<meshPhongMaterial color={'gray'} />
+				<mesh position={[0,-2,0]} rotation={[Math.PI/2,0,0]}>
+					<extrudeGeometry args={[underModel.underModelShape,extrudeSetting(4)]} />
+					<meshPhongMaterial color={'#666666'} />
 				</mesh>
 			</group>
 		</>

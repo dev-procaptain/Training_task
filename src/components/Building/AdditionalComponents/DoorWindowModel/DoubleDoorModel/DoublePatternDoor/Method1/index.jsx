@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import React,{useMemo} from 'react'
 
 import { useSelector } from 'react-redux';
-import {extrudeSetting} from '../../../../utils/Function';
+import {extrudeSetting} from '../../../../../../../utils/Function';
 
 const Method1=() => {
 	const width = useSelector((state) => state.building.buildingWidth);

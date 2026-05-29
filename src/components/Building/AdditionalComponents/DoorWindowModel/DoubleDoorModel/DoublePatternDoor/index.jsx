@@ -1,9 +1,9 @@
 import Method1 from './Method1';
 import Method2 from './Method2';
 
-const DoublePatternDoor = () => {
+const DoublePatternDoor = (props) => {
   return (
-    <Method2 />
+    <Method2 {...props} />
   )
 };
 

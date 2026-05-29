@@ -73,7 +73,7 @@ export const setInsideRotate = (distance) => {
 export const setTransparent = (method) => {
   return (dispatch) => {
     dispatch({
-      type: 'SET_Transparent_Build',
+      type: '                                   ',
       payload: method,
     });
   };
