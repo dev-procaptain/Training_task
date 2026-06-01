@@ -78,3 +78,22 @@ export const setTransparent = (method) => {
     });
   };
 };
+
+export const setStartPosition = (position) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_Start_Position',
+      payload: position,
+    })
+  };
+};
+
+export const updateStatePosition = (position) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'Update_Stae_Position',
+      payload: position
+    })
+  }
+};
+

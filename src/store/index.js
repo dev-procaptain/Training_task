@@ -25,4 +25,5 @@ export {
   setAutoRotate,
   setInsideRotate,
   setTransparent,
+  setStartPosition,
 } from './Action';

@@ -2,6 +2,7 @@ import {
   DEFAULT_MODEL_TYPE,
   getDimensionsForModelType,
 } from '../../utils/InitData';
+import {setStartPosition, updateStatePosition} from '../Action';
 
 const defaultDimensions = getDimensionsForModelType(DEFAULT_MODEL_TYPE);
 
@@ -19,6 +20,20 @@ export const controlInitalState = {
   rotateBuild: false,
   insideBuild: false,
   transparentBuild: false,
+}
+
+export const dragPositionInitialState = {
+  leftPosition: {
+    x: 0,
+    y: 0,
+    z: 0,
+  },
+  rightPosition: {
+    x: 0,
+    y: 0,
+    z: 0,
+  },
+
 }
 
 export const controlReducer = (state = controlInitalState, action) => {
@@ -73,5 +88,32 @@ export const controlReducer = (state = controlInitalState, action) => {
       return state;
   }
 };
+
+export const dragPositionReducer = (state = dragPositionInitialState, action) => {
+  switch (action.type) {
+    case 'SET_Start_Position': 
+    if ( action.payload.id === 3) {
+      return {
+        ...state,
+        leftPosition: {
+          x: action.payload.x,
+          y: action.payload.y,
+          z: action.payload.z,
+        }
+      };
+    } else if (action.payload.id === 4) {
+      return  {
+        ...state,
+        rightPosition: {
+          x: action.payload.x,
+          y: action.payload.y,
+          z: action.payload.z,
+        }
+      };
+    }
+    default:
+      return state;
+  }
+}
 
 export default reducer;

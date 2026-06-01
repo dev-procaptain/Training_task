@@ -5,7 +5,7 @@ import WallModel from './Wall';
 import Roof from './Roof';
 import DoorWindowModel from './AdditionalComponents/DoorWindowModel';
 
-export default function Building() {
+export default function Building({orbitRef}) {
   const modelType=useSelector((state) => state.building.modelType);
 
   return (
@@ -14,7 +14,7 @@ export default function Building() {
       <WallModel modelType={modelType} />
       <Roof modelType={modelType} />
 
-      <DoorWindowModel />
+      <DoorWindowModel orbitRef = {orbitRef}/>
     </>
   );
 }

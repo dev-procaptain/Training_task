@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useMemo} from 'react'
 import {useSelector} from 'react-redux'
 import * as THREE from 'three';
 import {TextureLoader} from 'three'
@@ -7,7 +7,6 @@ import {useLoader} from '@react-three/fiber';
 import {extrudeSetting} from '../../../../utils/Function';
 import GableWall from './GableWall';
 import LoftedWall from './LoftedWall';
-
 
 const InsideWall=({modelType}) => {
 	const colorMap=useLoader(TextureLoader,insideWallTexture);
@@ -21,7 +20,18 @@ const InsideWall=({modelType}) => {
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
 	const transParent = useSelector((state) => state.controlReducer.transparentBuild);
+	const additionalDoorData = useSelector((state) => state.building.additionalDoorData);
+	const leftPosition = useSelector((state) => state.dragPositionReducer.leftPosition);
+	const rightPosition = useSelector((state) => state.dragPositionReducer.rightPosition);
 
+	const leftDoorData = useMemo(() => {
+			return additionalDoorData.filter((s) => s.direction === 'left');
+		}, [additionalDoorData]);
+	
+		const rightDoorData = useMemo(() => {
+			return additionalDoorData.filter((s) => s.direction === 'right');
+		}, [additionalDoorData]);
+		
 	const frontBottomWall=new THREE.Shape()
 	frontBottomWall.moveTo(-width/2,0);
 	frontBottomWall.lineTo(-width/2,height);
@@ -29,12 +39,47 @@ const InsideWall=({modelType}) => {
 	frontBottomWall.lineTo(width/2,0);
 	frontBottomWall.closePath();
 
-	const sideWall=new THREE.Shape();
-	sideWall.moveTo(-length/2,0);
-	sideWall.lineTo(-length/2,height);
-	sideWall.lineTo(length/2,height);
-	sideWall.lineTo(length/2,0);
-	sideWall.closePath();
+	const leftSideWall=new THREE.Shape();
+	leftSideWall.moveTo(-length/2,0);
+	leftSideWall.lineTo(-length/2,height);
+	leftSideWall.lineTo(length/2,height);
+	leftSideWall.lineTo(length/2,0);
+	leftSideWall.closePath();
+	
+	const rightSideWall=new THREE.Shape();
+	rightSideWall.moveTo(-length/2,0);
+	rightSideWall.lineTo(-length/2,height);
+	rightSideWall.lineTo(length/2,height);
+	rightSideWall.lineTo(length/2,0);
+	rightSideWall.closePath();
+	
+	leftDoorData.forEach(item => {
+		const doorHole = new THREE.Shape();
+		if(item.groupType === 'DoubleDoorModel') {
+			if(item.doorType === 'double_pattern_door') {
+				doorHole.moveTo(-item.width / 2 - rightPosition.z, 0);
+				doorHole.lineTo(-item.width / 2 - rightPosition.z, item.height);
+				doorHole.lineTo(item.width / 2 - rightPosition.z, item.height);
+				doorHole.lineTo(item.width / 2 - rightPosition.z, 0);
+				doorHole.closePath();
+			}
+			leftSideWall.holes.push(doorHole);
+		}
+	});
+	
+	rightDoorData.forEach(item => {
+		const doorHole = new THREE.Shape();
+		if(item.groupType === 'DoubleDoorModel') {
+			if(item.doorType === 'double_pattern_door') {
+				doorHole.moveTo(-item.width / 2 - leftPosition.z, 0);
+				doorHole.lineTo(-item.width / 2 - leftPosition.z, item.height);
+				doorHole.lineTo(item.width / 2 - leftPosition.z, item.height);
+				doorHole.lineTo(item.width / 2 - leftPosition.z, 0);
+				doorHole.closePath();
+			}
+			rightSideWall.holes.push(doorHole);
+		}
+	});
 
 	return (
 		<>
@@ -68,7 +113,7 @@ const InsideWall=({modelType}) => {
 					/>
 				</mesh>
 				<mesh name='leftwall' rotation={[0,Math.PI/2,0]} position={[-width/2,0,0]}>
-					<extrudeGeometry args={[sideWall,extrudeSetting(1.5)]} />
+					<extrudeGeometry args={[leftSideWall,extrudeSetting(1.5)]} />
 					<meshStandardMaterial
 						bumpMap={colorMap}
 						bumpScale={0.2}
@@ -82,7 +127,7 @@ const InsideWall=({modelType}) => {
 					/>
 				</mesh>
 				<mesh name='rightwall' rotation={[0,Math.PI/2,0]} position={[width/2-1.5,0,0]}>
-					<extrudeGeometry args={[sideWall,extrudeSetting(1.5)]} />
+					<extrudeGeometry args={[rightSideWall,extrudeSetting(1.5)]} />
 					<meshStandardMaterial
 						bumpMap={colorMap}
 						bumpScale={0.2}

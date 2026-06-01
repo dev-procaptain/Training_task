@@ -23,7 +23,7 @@ function App() {
             }}
           >
             <CanvasEnv orbitRef = {orbitRef} />
-            <Building />
+            <Building orbitRef = {orbitRef}/>
           </Canvas>
         </div>
         
