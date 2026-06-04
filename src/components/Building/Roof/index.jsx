@@ -2,11 +2,12 @@ import React from 'react'
 import InsideRoof from './InsideRoof';
 import OutsideRoof from './OutsideRoof';
 
-const Roof=({modelType}) => {
+const Roof= () => {
+	
 	return (
 		<>
-			<InsideRoof modelType={modelType} />
-			<OutsideRoof modelType={modelType} />
+			<InsideRoof />
+			<OutsideRoof />
 		</>
 	)
 }

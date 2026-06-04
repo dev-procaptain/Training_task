@@ -146,8 +146,8 @@ const GableTruss=() => {
 			<group name='roofTruss'>
 				{
 					baseSideRail.roofTrussGap.map((item,index) => (
-						<>
-							<mesh key={index} position={[0,height+5,(length/2-railThickness-railThickness/2-index*item)]}>
+						<group key={`gable-truss-group-${index}`}>
+							<mesh key={`gable-truss-main-truss-${index}`} position={[0,height+5,(length/2-railThickness-railThickness/2-index*item)]}>
 								<extrudeGeometry args={[baseSideRail.roofTrussModel,extrudeSetting(3)]} />
 								<meshStandardMaterial
 									bumpMap={colorMap}
@@ -159,7 +159,7 @@ const GableTruss=() => {
 									metalness={0}
 								/>
 							</mesh>
-							<mesh key={index} position={[0,height+5,(length/2-railThickness-railThickness/2-index*item)]}>
+							<mesh key={`gable-truss-mid-truss-${index}`} position={[0,height+5,(length/2-railThickness-railThickness/2-index*item)]}>
 								<extrudeGeometry args={[baseSideRail.roofMidTrussModel,extrudeSetting(3)]} />
 								<meshStandardMaterial
 									bumpMap={colorMap}
@@ -171,7 +171,7 @@ const GableTruss=() => {
 									metalness={0}
 								/>
 							</mesh>
-						</>
+						</group>
 					))
 				}
 			</group>

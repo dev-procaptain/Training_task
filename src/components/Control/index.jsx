@@ -44,7 +44,7 @@ const Control = () => {
           borderColor: 'divider',
         }}
       >
-        <Stack direction="row" alignItems="center" spacing={1}>
+        <Stack direction="row" alignitems="center" spacing={1}>
           <ViewInArIcon color="primary" fontSize="small" />
           <Typography variant="h6">Building Options</Typography>
         </Stack>
@@ -87,7 +87,7 @@ const Control = () => {
           <Divider />
 
           <section>
-            <Stack direction="row" alignItems="center" spacing={0.75} sx={{ mb: 1.5 }}>
+            <Stack direction="row" alignitems="center" spacing={0.75} sx={{ mb: 1.5 }}>
               <TuneIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
               <Typography variant="subtitle2">Building Dimensions</Typography>
             </Stack>

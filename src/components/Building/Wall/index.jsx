@@ -1,14 +1,14 @@
-import * as THREE from 'three'
 import React from "react";
-import InsideWall from './InsideWall';
-import OutsideWall from './OutsideWall';
-import {useSelector} from 'react-redux';
+import FrontWall from "./FrontWall";
+import BackWall from "./BackWall";
+import SideWall from "./SideWall";
 
-const WallModel=({modelType}) => {
+const WallModel=() => {
 	return (
 		<>
-			<InsideWall modelType={modelType} />
-			<OutsideWall modelType={modelType} />
+			<FrontWall />
+			<BackWall />
+			<SideWall />
 		</>
 	)
 }

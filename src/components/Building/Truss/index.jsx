@@ -10,11 +10,13 @@ import {extrudeSetting} from '../../../utils/Function';
 import GableTruss from './GableTruss'
 import LoftedTruss from './LoftedTruss';
 
-const Truss=({modelType}) => {
+const Truss=() => {
 	const width=useSelector((state) => state.building.buildingWidth);
 	const length=useSelector((state) => state.building.buildingLength);
 	const height=useSelector((state) => state.building.buildingHeight);
 	const pitchRise=useSelector((state) => state.building.buildingPitch);
+	const modelType = useSelector((state) => state.building.modelType);
+
 	const dstRailL=30;
 	const pitchRatio=pitchRise/12;
 	const railWidth=4;
@@ -228,8 +230,8 @@ const Truss=({modelType}) => {
 				</mesh>
 			</group>
 
-			{modelType==='gable_building'&&<GableTruss />}
-			{modelType==='lofted_building'&&< LoftedTruss />}
+			{modelType === 'gable_building' && <GableTruss />}
+			{modelType === 'lofted_building' && <LoftedTruss />}
 		</>
 	)
 }

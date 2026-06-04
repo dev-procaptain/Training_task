@@ -17,7 +17,6 @@ const DoorWindowModel = () => {
         return additionalDoorData.map((item, index) => {
             const Component = COMPONENT_MAP[item.groupType];
             const props = {
-                key: index,
                 id: item.id,
                 doorType: item.doorType,
                 direction: item.direction,
@@ -25,7 +24,7 @@ const DoorWindowModel = () => {
                 height: item.height,
                 trimWidth: item.trimWidth,
             }
-            return <Component {...props} />
+            return <Component key={`added-cmps-${index}`} {...props} />
         })
     },[additionalDoorData])
     return (
