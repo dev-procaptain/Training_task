@@ -20,18 +20,30 @@ export const controlInitalState = {
   rotateBuild: false,
   insideBuild: false,
   transparentBuild: false,
+  doubleDoorOnClick: false,
+  walkInDoorOnClick: false,
 }
 
 export const dragPositionInitialState = {
-  leftPosition: {
+  doubleDoorLeftPosition: {
     x: 0,
     y: 0,
-    z: 0,
+    z: 100,
   },
-  rightPosition: {
+  doubleDoorRightPosition: {
     x: 0,
     y: 0,
-    z: 0,
+    z: 100,
+  },
+  singleCurveDoorLeftPosition: {
+    x: 0,
+    y: 0,
+    z: -100,
+  },
+  singleCurveDoorRightPosition: {
+    x: 0,
+    y: 0,
+    z: -100,
   },
 
 }
@@ -54,6 +66,18 @@ export const controlReducer = (state = controlInitalState, action) => {
         return {
           ...state,
           transparentBuild: action.payload
+        }
+        
+      case 'SET_DoubleDoor_Onclick':
+        return {
+          ...state,
+          doubleDoorOnClick: action.payload
+        }
+        
+      case 'SET_WalkInDoor_Onclick':
+        return {
+          ...state,
+          walkInDoorOnClick: action.payload
         }
   default:
     return state;
@@ -95,7 +119,7 @@ export const dragPositionReducer = (state = dragPositionInitialState, action) =>
     if ( action.payload.id === 3) {
       return {
         ...state,
-        leftPosition: {
+        doubleDoorLeftPosition: {
           x: action.payload.x,
           y: action.payload.y,
           z: action.payload.z,
@@ -104,7 +128,25 @@ export const dragPositionReducer = (state = dragPositionInitialState, action) =>
     } else if (action.payload.id === 4) {
       return  {
         ...state,
-        rightPosition: {
+        doubleDoorRightPosition: {
+          x: action.payload.x,
+          y: action.payload.y,
+          z: action.payload.z,
+        }
+      };
+    } else if (action.payload.id === 5) {
+      return  {
+        ...state,
+        singleCurveDoorLeftPosition: {
+          x: action.payload.x,
+          y: action.payload.y,
+          z: action.payload.z,
+        }
+      };
+    } else if (action.payload.id === 6) {
+      return  {
+        ...state,
+        singleCurveDoorRightPosition: {
           x: action.payload.x,
           y: action.payload.y,
           z: action.payload.z,

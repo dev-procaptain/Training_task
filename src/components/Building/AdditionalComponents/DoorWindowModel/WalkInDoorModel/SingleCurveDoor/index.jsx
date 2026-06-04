@@ -7,10 +7,11 @@ import { useSelector } from 'react-redux';
 import shedTexture from '../../../../../../assets/imgs/horizontal_hardie_plank.jpg';
 import {extrudeSetting} from '../../../../../../utils/Function';
 
-const SingleCurveDoor=() => {
+const SingleCurveDoor=({doorType, width, height, id, trimWidth, direction}) => {
+	console.log('height:=== ', height);
 
-	const width = useSelector((state) => state.building.buildingWidth);
-	const height = useSelector((state) => state.building.buildingHeight);
+	const buildingWidth = useSelector((state) => state.building.buildingWidth);
+	const buildingHeight = useSelector((state) => state.building.buildingHeight);
 	const outTrimThk=5;
 	const inTrimThk=3;
 	const railPadding=4;
@@ -114,7 +115,7 @@ const SingleCurveDoor=() => {
 	innerDoorShape.holes.push(topRailShape);
 
 	return (
-		<>
+		<group rotation={direction === 'left' ? [0, Math.PI / 2, 0] : [0, -Math.PI / 2, 0]} position={direction === 'left' ? [buildingWidth / 2 + 3, 0, 0] : [-buildingWidth / 2 - 3, 0 , 0]}>
 			<group name='Trim'>
 				<mesh name='outTrim'>
 					<extrudeGeometry args={[outTrimShape,extrudeSetting(5)]} />
@@ -160,7 +161,7 @@ const SingleCurveDoor=() => {
 					<meshStandardMaterial color={'white'} />
 				</mesh>
 			</group>
-		</>
+		</group>
 	)
 }
 

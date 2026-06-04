@@ -26,4 +26,6 @@ export {
   setInsideRotate,
   setTransparent,
   setStartPosition,
+  setDoubleDoorOnClick,
+  setWalkInDoorOnClick,
 } from './Action';

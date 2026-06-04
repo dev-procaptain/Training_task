@@ -73,7 +73,7 @@ export const setInsideRotate = (distance) => {
 export const setTransparent = (method) => {
   return (dispatch) => {
     dispatch({
-      type: '                                   ',
+      type: 'SET_Transparent_Build',
       payload: method,
     });
   };
@@ -96,4 +96,22 @@ export const updateStatePosition = (position) => {
     })
   }
 };
+
+export const setDoubleDoorOnClick = (value) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_DoubleDoor_Onclick',
+      payload: value,
+    })
+  }
+}
+
+export const setWalkInDoorOnClick = (value) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_WalkInDoor_Onclick',
+      payload: value,
+    })
+  }
+}
 

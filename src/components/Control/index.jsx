@@ -15,15 +15,23 @@ import {
   MODEL_TYPE_OPTIONS,
   getModelLabel,
   getSliderFieldsForModel,
+  setDoubleDoorOnClick,
   setModelType,
+  setWalkInDoorOnClick,
 } from '../../store';
 import RangeSlider from '../RangeSlider';
 
 const Control = () => {
   const dispatch = useDispatch();
   const modelType = useSelector((state) => state.building.modelType);
+  const doubleDoorClick = useSelector((state) => state.controlReducer.doubleDoorOnClick);
+  const walkInDoorClick = useSelector((state) => state.controlReducer.walkInDoorOnClick);
   const sliderFields = getSliderFieldsForModel(modelType);
 
+  const doubleDoorOnClick = () => dispatch(doubleDoorClick === false ? setDoubleDoorOnClick(true) : setDoubleDoorOnClick(false))
+  
+  const walkInDoorOnClick = () => dispatch(walkInDoorClick === false ? setWalkInDoorOnClick(true): setWalkInDoorOnClick(false))
+  
   return (
     <Paper
       elevation={0}
@@ -104,6 +112,18 @@ const Control = () => {
           </section>
         </Stack>
       </Box>
+      <div style={{display:'flex', gap: 10}}>
+        <button
+          onClick={doubleDoorOnClick}
+        >
+          Double Door
+        </button>
+        <button
+          onClick={walkInDoorOnClick}
+        >
+          wolkIn Door
+        </button>
+      </div>
     </Paper>
   );
 };

@@ -3,10 +3,12 @@ import { useSelector } from 'react-redux';
 // import DoublePatternDoor from './DoubleDoorModel/DoublePatternDoor';
 import WindowModel from './WindowModel';
 import DoubleDoorModel from './DoubleDoorModel';
+import WalkInDoorModel from './WalkInDoorModel';
 
 const COMPONENT_MAP = {
     DoubleDoorModel: DoubleDoorModel,
     WindowModel: WindowModel,
+    WalkInDoorModel: WalkInDoorModel,
 };
 
 const DoorWindowModel = ({orbitRef}) => {
@@ -17,7 +19,7 @@ const DoorWindowModel = ({orbitRef}) => {
             const Component = COMPONENT_MAP[item.groupType];
             const props = {
                 key: index,
-                id: item,
+                id: item.id,
                 doorType: item.doorType,
                 direction: item.direction,
                 width: item.width,

@@ -20,7 +20,7 @@ const CanvasEnv=({orbitRef}) => {
         duration={0.5}
         autoRotateSpeed={8}
       />
-      <Environment preset="city" background backgroundBlurriness={1} backgroundIntensity={2} />
+      {/*<Environment preset="city" background backgroundBlurriness={1} backgroundIntensity={2} />*/}
       <axesHelper args={[500,500,500]} />
     </>
   );

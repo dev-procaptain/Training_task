@@ -13,7 +13,6 @@ export default function Building({orbitRef}) {
       <Truss modelType={modelType} />
       <WallModel modelType={modelType} />
       <Roof modelType={modelType} />
-
       <DoorWindowModel orbitRef = {orbitRef}/>
     </>
   );

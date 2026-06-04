@@ -20,10 +20,13 @@ const OutsideWall=({modelType}) => {
 	const height=useSelector((state) => state.building.buildingHeight);
 	const width=useSelector((state) => state.building.buildingWidth);
 	const transParent = useSelector((state) => state.controlReducer.transparentBuild);
+	const doubleDoorOnClick = useSelector((state) => state.controlReducer.doubleDoorOnClick);
+	const walkInDoorOnClick = useSelector((state) => state.controlReducer.walkInDoorOnClick);
+	const SingleCurveDoorLeftPosition = useSelector((state) => state.dragPositionReducer.singleCurveDoorLeftPosition);
+	const singleCurveDoorRightPosition = useSelector((state) => state.dragPositionReducer.singleCurveDoorRightPosition);
 	const additionalDoorData = useSelector((state) => state.building.additionalDoorData);
-	const leftPosition = useSelector((state) => state.dragPositionReducer.leftPosition);
-	const rightPosition = useSelector((state) => state.dragPositionReducer.rightPosition);
-
+	const doubleDoorLeftPosition = useSelector((state) => state.dragPositionReducer.doubleDoorLeftPosition);
+	const doubleDoorRightPosition = useSelector((state) => state.dragPositionReducer.doubleDoorRightPosition);
 	
 	const leftDoorData = useMemo(() => {
 		return additionalDoorData.filter((s) => s.direction === 'left');
@@ -47,41 +50,62 @@ const OutsideWall=({modelType}) => {
 	rightWallSideShape.lineTo(length/2+3,-5);
 	rightWallSideShape.closePath();
 	
-	
-	leftDoorData.forEach(item => {
-				const doorHole = new THREE.Shape();
-				if(item.groupType === 'DoubleDoorModel') {
-					if(item.doorType === 'double_pattern_door') {
-						doorHole.moveTo(-item.width / 2 - rightPosition.z, 0);
-						doorHole.lineTo(-item.width / 2 - rightPosition.z, item.height);
-						doorHole.lineTo(item.width / 2 - rightPosition.z, item.height);
-						doorHole.lineTo(item.width / 2 - rightPosition.z, 0);
-						doorHole.closePath();
-					}
-					leftWallSideShape.holes.push(doorHole);
-				}
-			});
-
 	rightDoorData.forEach(item => {
-				const doorHole = new THREE.Shape();
-				if(item.groupType === 'DoubleDoorModel') {
-					if(item.doorType === 'double_pattern_door') {
-						doorHole.moveTo(-item.width / 2 - leftPosition.z, 0);
-						doorHole.lineTo(-item.width / 2 - leftPosition.z, item.height);
-						doorHole.lineTo(item.width / 2 - leftPosition.z, item.height);
-						doorHole.lineTo(item.width / 2 - leftPosition.z, 0);
-						doorHole.closePath();
-					}
-					rightWallSideShape.holes.push(doorHole);
-				}
-			});
-	
-	
+		const doorHole = new THREE.Shape();
+		if(item.groupType === 'DoubleDoorModel') {
+			if(item.doorType === 'double_pattern_door' && doubleDoorOnClick) {
+				doorHole.moveTo(-item.width / 2 - doubleDoorRightPosition.z, 0);
+				doorHole.lineTo(-item.width / 2 - doubleDoorRightPosition.z, item.height);
+				doorHole.lineTo(item.width / 2 - doubleDoorRightPosition.z, item.height);
+				doorHole.lineTo(item.width / 2 - doubleDoorRightPosition.z, 0);
+				doorHole.closePath();
+				rightWallSideShape.holes.push(doorHole);
+			}
+		}
+		
+		if(item.groupType === 'WalkInDoorModel') {
+			if(item.doorType === 'Single_Curve_Door' && walkInDoorOnClick) {
+				 doorHole.moveTo(-item.width / 2 - singleCurveDoorRightPosition.z, 0);
+				 doorHole.lineTo(-item.width / 2 - singleCurveDoorRightPosition.z, item.height / 4 * 3);
+				 doorHole.quadraticCurveTo(-item.width / 2 - singleCurveDoorRightPosition.z, item.height, -singleCurveDoorRightPosition.z, item.height);
+				 doorHole.quadraticCurveTo(item.width / 2 - singleCurveDoorRightPosition.z, item.height, item.width / 2 - singleCurveDoorRightPosition.z, item.height / 4 * 3);
+				 doorHole.lineTo(item.width / 2 - singleCurveDoorRightPosition.z, 0);
+				 doorHole.closePath();
+				 rightWallSideShape.holes.push(doorHole);
+			 }
+		}
+	});
+
+	leftDoorData.forEach(item => {
+		const doorHole = new THREE.Shape();
+		if(item.groupType === 'DoubleDoorModel') {
+			if(item.doorType === 'double_pattern_door' && doubleDoorOnClick) {
+				doorHole.moveTo(-item.width / 2 - doubleDoorLeftPosition.z, 0);
+				doorHole.lineTo(-item.width / 2 - doubleDoorLeftPosition.z, item.height);
+				doorHole.lineTo(item.width / 2 - doubleDoorLeftPosition.z, item.height);
+				doorHole.lineTo(item.width / 2 - doubleDoorLeftPosition.z, 0);
+				doorHole.closePath();
+				leftWallSideShape.holes.push(doorHole);
+			}
+		}
+		
+		if(item.groupType === 'WalkInDoorModel') {
+			if(item.doorType === 'Single_Curve_Door' && walkInDoorOnClick) {
+				doorHole.moveTo(-item.width / 2 - SingleCurveDoorLeftPosition.z, 0);
+				doorHole.lineTo(-item.width / 2 - SingleCurveDoorLeftPosition.z, item.height / 4 * 3);
+				doorHole.quadraticCurveTo(-item.width / 2 - SingleCurveDoorLeftPosition.z, item.height, -SingleCurveDoorLeftPosition.z, item.height);
+				doorHole.quadraticCurveTo(item.width / 2 - SingleCurveDoorLeftPosition.z, item.height, item.width / 2 - SingleCurveDoorLeftPosition.z, item.height / 4 * 3);
+				doorHole.lineTo(item.width / 2 - SingleCurveDoorLeftPosition.z, 0);
+				doorHole.closePath();
+				leftWallSideShape.holes.push(doorHole);
+			 }
+		}
+	});
 	
 	return (
 		<>
-			<mesh name='left wall' rotation={[0,Math.PI/2,0]} position={[-width/2-4,0,0]} >
-				<extrudeGeometry args={[leftWallSideShape,extrudeSetting(2)]} />
+			<mesh name='right wall' rotation={[0,Math.PI/2,0]} position={[-width/2-4,0,0]} >
+				<extrudeGeometry args={[rightWallSideShape,extrudeSetting(2)]} />
 				<meshLambertMaterial
 					bumpMap={colorMap}
 					bumpScale={0.2}
@@ -94,8 +118,8 @@ const OutsideWall=({modelType}) => {
 					opacity={transParent ? 0.05 : 1}
 				/>
 			</mesh>
-			<mesh name='right wall' rotation={[0,Math.PI/2,0]} position={[width/2+2,0,0]} >
-				<extrudeGeometry args={[rightWallSideShape,extrudeSetting(2)]} />
+			<mesh name='left wall' rotation={[0,Math.PI/2,0]} position={[width/2+2,0,0]} >
+				<extrudeGeometry args={[leftWallSideShape,extrudeSetting(2)]} />
 				<meshLambertMaterial
 					bumpMap={colorMap}
 					bumpScale={0.2}
