@@ -18,6 +18,7 @@ import {
   setModelType,
 } from '../../store';
 import RangeSlider from '../RangeSlider';
+import Button from '@mui/material/Button';
 
 const Control = () => {
   const dispatch = useDispatch();
@@ -102,6 +103,22 @@ const Control = () => {
               />
             ))}
           </section>
+        </Stack>
+      </Box>
+
+      <Box sx={{ borderTop: 1, borderColor: 'divider', px: 3, py: 2 }}>
+        <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+          <Button variant="outlined" fullWidth sx={{ flex: 1 }}>
+            Double Door
+          </Button>
+          <Button variant="outlined" fullWidth sx={{ flex: 1 }}>
+            Walk In Door
+          </Button>
+        </Stack>
+        <Stack direction="row" spacing={1}>
+          <Button variant="outlined" fullWidth>
+            Window
+          </Button>
         </Stack>
       </Box>
     </Paper>
