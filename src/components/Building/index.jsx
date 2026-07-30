@@ -9,7 +9,7 @@ export default function Building() {
 
   return (
     <>
-      <Truss />
+      {/* <Truss /> */}
       <WallModel />
       <Roof />
 
